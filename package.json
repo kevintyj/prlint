@@ -1,0 +1,48 @@
+{
+	"name": "@kevintyj/csetslinter",
+	"type": "module",
+	"version": "0.0.0",
+	"private": false,
+	"author": "Kevin Taeyoon Jin <hello@kevintyj.com>",
+	"license": "BSD-3-Clause",
+	"homepage": "https://github.com/kevintyj/conventionalsets#readme",
+	"repository": "github:kevintyj/conventionalsets",
+	"bugs": {
+		"url": "https://github.com/kevintyj/conventionalsets/issues"
+	},
+	"keywords": [
+		"changesets",
+		"conventional",
+		"github"
+	],
+	"exports": {
+		"import": "./dist/index.js",
+		"require": "./dist/index.cjs",
+		"default": "./dist/index.js"
+	},
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"scripts": {
+		"watch": "tsup --watch",
+		"build": "tsup",
+		"test": "vitest",
+		"lint:es": "eslint .",
+		"clean": "git clean -fdX",
+		"ci": "pnpm run lint:es && pnpm run build",
+		"release": "pnpm run ci && changeset publish"
+	},
+	"dependencies": {
+		"@actions/core": "^1.10.1",
+		"@actions/github": "^6.0.0",
+		"@commitlint/config-conventional": "^18.1.0",
+		"@commitlint/lint": "^18.1.0",
+		"@commitlint/load": "^18.2.0"
+	},
+	"devDependencies": {
+		"@commitlint/types": "^18.1.0",
+		"@types/node": "^20.9.0",
+		"tsup": "^7.2.0",
+		"typescript": "^5.2.2",
+		"vitest": "^0.34.6"
+	}
+}
