@@ -15,6 +15,9 @@
 		"conventional",
 		"github"
 	],
+	"publishConfig": {
+		"provenance": true
+	},
 	"exports": {
 		"import": "./dist/index.js",
 		"require": "./dist/index.cjs",
@@ -41,6 +44,7 @@
 	},
 	"devDependencies": {
 		"@antfu/eslint-config": "^2.1.0",
+		"@changesets/changelog-github": "^0.4.8",
 		"@changesets/cli": "^2.26.2",
 		"@commitlint/cli": "^18.4.3",
 		"@commitlint/types": "^18.1.0",
