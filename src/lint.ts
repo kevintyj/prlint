@@ -3,6 +3,7 @@ import * as fs from 'node:fs';
 import type { LintOptions, ParserOptions, QualifiedConfig } from '@commitlint/types';
 import load from '@commitlint/load';
 import lint from '@commitlint/lint';
+import { setOutput } from '@actions/core';
 import logWithTile from './log';
 
 const defaultConfig = {
@@ -44,6 +45,7 @@ export async function verifyTitle(title: string, configPath: string = ''): Promi
 	const linterResult = await lint(title, commitlintConfig.rules, getLintOptions(commitlintConfig));
 
 	if (linterResult.valid) {
+		setOutput('✅ Commitlint tests passed!\n', linterResult);
 		return true;
 	}
 	else {

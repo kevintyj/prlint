@@ -1,0 +1,9 @@
+name: Commitlint (prlint)
+author: Kevin Taeyoon Jin <hello@kevintyj.com>
+description: Ensure PR title match commitlint config
+runs:
+  using: node20
+  main: dist/index.cjs
+branding:
+  icon: git-pull-request
+  color: green
