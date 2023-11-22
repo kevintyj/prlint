@@ -1,0 +1,35 @@
+name: 📝 Lint PR title
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔖Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: 📦Setup PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: 🌳Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: 🛠️Install dependencies from lockfile
+        run: pnpm install --frozen-lockfile
+
+      - name: 🧾Print versions
+        run: |
+          git --version
+          node --version
+          pnpm --version
+          pnpm commitlint --version
+
+      - name: 📝Validate PR title with commitlint
+        uses: ./

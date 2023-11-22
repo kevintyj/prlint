@@ -1,14 +1,14 @@
 {
-	"name": "@kevintyj/csetslinter",
+	"name": "@kevintyj/prlint",
 	"type": "module",
 	"version": "0.0.0",
 	"private": false,
 	"author": "Kevin Taeyoon Jin <hello@kevintyj.com>",
 	"license": "BSD-3-Clause",
-	"homepage": "https://github.com/kevintyj/conventionalsets#readme",
-	"repository": "github:kevintyj/conventionalsets",
+	"homepage": "https://github.com/kevintyj/prlint#readme",
+	"repository": "github:kevintyj/prlint",
 	"bugs": {
-		"url": "https://github.com/kevintyj/conventionalsets/issues"
+		"url": "https://github.com/kevintyj/prlint/issues"
 	},
 	"keywords": [
 		"changesets",
@@ -23,6 +23,7 @@
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"scripts": {
+		"prepare": "husky install",
 		"watch": "tsup --watch",
 		"build": "tsup",
 		"test": "vitest",
@@ -39,10 +40,19 @@
 		"@commitlint/load": "^18.2.0"
 	},
 	"devDependencies": {
+		"@antfu/eslint-config": "^2.1.0",
+		"@changesets/cli": "^2.26.2",
+		"@commitlint/cli": "^18.4.3",
 		"@commitlint/types": "^18.1.0",
 		"@types/node": "^20.9.0",
+		"eslint": "^8.54.0",
+		"husky": "^8.0.3",
+		"lint-staged": "^15.1.0",
 		"tsup": "^7.2.0",
 		"typescript": "^5.2.2",
 		"vitest": "^0.34.6"
+	},
+	"lint-staged": {
+		"*": "eslint --fix"
 	}
 }

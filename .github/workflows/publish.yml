@@ -1,0 +1,39 @@
+name: 🚀 Build & Publish
+# Forceful manual trigger
+on:
+  workflow_dispatch:
+
+# Disable concurrent builds
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔖Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: 📦Setup PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: 🌳Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: 🛠️Install dependencies from lockfile
+        run: pnpm install --frozen-lockfile
+
+      - name: 🦋Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: pnpm release
+          commit: 'ci(release): Version packages'
+          title: 'ci(release): Version packages'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

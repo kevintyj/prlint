@@ -1,0 +1,26 @@
+{
+	"compilerOptions": {
+		/* Build */
+		"target": "es2017",
+		"lib": ["ESNext", "DOM", "DOM.Iterable"],
+		"module": "ESNext",
+		"declaration": true,
+		"declarationDir": "dist/types",
+		"outDir": "dist",
+		"esModuleInterop": true,
+		"noEmit": true,
+
+		/* Bundler mode */
+		"moduleResolution": "bundler",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+
+		/* Linting */
+		"strict": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"forceConsistentCasingInFileNames": true
+	},
+	"exclude": ["node_modules", "dist"]
+}
