@@ -5,6 +5,7 @@ import load from '@commitlint/load';
 import lint from '@commitlint/lint';
 import { setOutput } from '@actions/core';
 import logWithTile from './log';
+import handleError from './errHandle';
 
 const defaultConfig = {
 	extends: '@commitlint/config-conventional',
@@ -32,15 +33,45 @@ export const testLintOptions = {
 };
 
 /**
+ * Convert a ESM js file to CJS
+ * @param {string} inputFilePath - Input file path for conversion
+ * @param {string} outputFilePath - Output file path
+ */
+async function convertESMtoCJS(inputFilePath: string, outputFilePath: string) {
+	try {
+		const esmContent = fs.readFileSync(inputFilePath, 'utf8');
+
+		// Replace import, export, and variable declaration statements using regex
+		const cjsContent = esmContent
+			.replace(/import (.+?) from ['"](.+?)['"]/g, 'const $1 = require(\'$2\')')
+			.replace(/export default/g, 'module.exports =')
+			.replace(/export (const|let|var|function|class) (\w+)/g, 'exports.$2 = $2');
+
+		fs.writeFileSync(outputFilePath, cjsContent, 'utf8');
+	}
+	catch (err) {
+		handleError(err);
+	}
+}
+
+/**
  * Utilizes the {@link lint} function to verify the title with options fetched using {@link getLintOptions}
  * @param {string} title - The commit/PR title to check for lint
  * @param {string} configPath - The configuration path of the commitlint config fetched from current working directory
  * @return {Promise<boolean>} - Returns true if linter passes, throws {@link Error} if failing
  */
 export async function verifyTitle(title: string, configPath: string = ''): Promise<boolean> {
-	const commitlintConfig: QualifiedConfig = fs.existsSync(configPath)
-		? await load({}, { file: configPath, cwd: process.cwd() })
-		: await load(defaultConfig);
+	const outputConfig = async () => {
+		if (fs.existsSync(configPath)) {
+			await convertESMtoCJS(configPath, 'commitlint-cjs.config.cjs');
+			return await load({}, { file: 'commitlint-cjs.config.cjs', cwd: process.cwd() });
+		}
+		else {
+			return await load(defaultConfig);
+		}
+	};
+
+	const commitlintConfig: QualifiedConfig = await outputConfig();
 
 	const linterResult = await lint(title, commitlintConfig.rules, getLintOptions(commitlintConfig));
 
