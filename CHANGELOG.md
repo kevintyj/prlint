@@ -1,5 +1,11 @@
 # @kevintyj/prlint
 
+## 0.1.0
+
+### Minor Changes
+
+- [`f3fc140`](https://github.com/kevintyj/prlint/commit/f3fc1404a886a372257ac2dd9a95a52802892fc2) Thanks [@kevintyj](https://github.com/kevintyj)! - Stable build with in-built packages for independent usage
+
 ## 0.0.1
 
 ### Patch Changes
