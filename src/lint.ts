@@ -45,7 +45,8 @@ export async function verifyTitle(title: string, configPath: string = ''): Promi
 	const linterResult = await lint(title, commitlintConfig.rules, getLintOptions(commitlintConfig));
 
 	if (linterResult.valid) {
-		setOutput('✅ Commitlint tests passed!\n', linterResult);
+		setOutput('lint-status', '✅ Commitlint tests passed!\n');
+		setOutput('lint-details', linterResult);
 		return true;
 	}
 	else {
