@@ -20,9 +20,6 @@ dependencies:
   '@commitlint/load':
     specifier: ^18.2.0
     version: 18.4.3(typescript@5.3.2)
-  esm-to-cjs:
-    specifier: ^1.2.1
-    version: 1.2.1
 
 devDependencies:
   '@antfu/eslint-config':
@@ -2551,10 +2548,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
-
-  /esm-to-cjs@1.2.1:
-    resolution: {integrity: sha512-5zzepH0eV7F3LOz+p3Hn8iTaszfqVu9ueGcLltcuCz2kNe7Dbu9p2hePzi3xN+0S/m/d0WCC1IjIEP2UoHbmuQ==}
-    dev: false
 
   /espree@9.6.1:
     resolution: {integrity: sha512-oruZaFkjorTpF32kDSI5/75ViwGeZginGGy2NoOSg3Q9bnwlnmDm4HLnkl0RE3n+njDXR037aY1+x58Z/zFdwQ==}

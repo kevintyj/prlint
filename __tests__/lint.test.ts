@@ -17,9 +17,7 @@ const emptyConfigOption = {
 			'subject',
 		],
 		headerPattern: /^(\w*)(?:\((.*)\))?!?: (.*)$/,
-		issuePrefixes: [
-			'#',
-		],
+		issuePrefixes: ['#'],
 		noteKeywords: [
 			'BREAKING CHANGE',
 			'BREAKING-CHANGE',
@@ -71,4 +69,6 @@ describe('commitlint', async () => {
 		await expect(verifyTitle('feat: Title is short and nice!', 'something.config.js')).resolves.toEqual(true);
 		await expect(verifyTitle('test: Add test suites', 'commitlint.config.js')).resolves.toEqual(true);
 	});
+
+	// TODO: Add tests for esm-to-cjs
 });

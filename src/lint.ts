@@ -5,9 +5,7 @@ import load from '@commitlint/load';
 import lint from '@commitlint/lint';
 import { setOutput } from '@actions/core';
 import logWithTile from './log';
-
-// eslint-disable-next-line ts/no-require-imports,ts/no-var-requires
-const { runTransform } = require('esm-to-cjs');
+import handleError from './errHandle';
 
 const defaultConfig = {
 	extends: '@commitlint/config-conventional',
@@ -35,6 +33,28 @@ export const testLintOptions = {
 };
 
 /**
+ * Convert a ESM js file to CJS
+ * @param {string} inputFilePath - Input file path for conversion
+ * @param {string} outputFilePath - Output file path
+ */
+async function convertESMtoCJS(inputFilePath: string, outputFilePath: string) {
+	try {
+		const esmContent = fs.readFileSync(inputFilePath, 'utf8');
+
+		// Replace import, export, and variable declaration statements using regex
+		const cjsContent = esmContent
+			.replace(/import (.+?) from ['"](.+?)['"]/g, 'const $1 = require(\'$2\')')
+			.replace(/export default/g, 'module.exports =')
+			.replace(/export (const|let|var|function|class) (\w+)/g, 'exports.$2 = $2');
+
+		fs.writeFileSync(outputFilePath, cjsContent, 'utf8');
+	}
+	catch (err) {
+		handleError(err);
+	}
+}
+
+/**
  * Utilizes the {@link lint} function to verify the title with options fetched using {@link getLintOptions}
  * @param {string} title - The commit/PR title to check for lint
  * @param {string} configPath - The configuration path of the commitlint config fetched from current working directory
@@ -42,25 +62,8 @@ export const testLintOptions = {
  */
 export async function verifyTitle(title: string, configPath: string = ''): Promise<boolean> {
 	const outputConfig = async () => {
-		// Convert ESM to CJS using esm-to-cjs
-		// Upstream module `esm-to-cjs` does not provide typings, unsafe calls are ignored
 		if (fs.existsSync(configPath)) {
-			fs.readFile(configPath, 'utf-8', (err, data) => {
-				if (err)
-					throw new Error('Error reading file:', err);
-
-				// eslint-disable-next-line ts/no-unsafe-call,ts/no-unsafe-assignment
-				const transformedContent = runTransform(data);
-
-				// eslint-disable-next-line ts/no-unsafe-argument
-				fs.writeFile('commitlint-cjs.config.js', transformedContent, (writeErr) => {
-					if (writeErr)
-						throw new Error('Error writing file:', writeErr);
-					 else
-						// eslint-disable-next-line no-console
-						console.log(`ESM file '${configPath}' converted to 'commitlint-cjs.config.js' successfully.`);
-				});
-			});
+			await convertESMtoCJS(configPath, 'commitlint-cjs.config.js');
 			return await load({}, { file: 'commitlint-cjs.config.js', cwd: process.cwd() });
 		}
 		else {

@@ -29,7 +29,7 @@
     "json:pre": "json -I -f package.json -e 'this.type = \"commonjs\"'",
     "json:post": "json -I -f package.json -e 'this.type = \"module\"' && echo '{\"type\": \"commonjs\"}' > dist/package.json",
     "prebuild": "pnpm run clean:build && pnpm run json:pre",
-    "build": "pnpm run prebuild && tsc && ncc build lib/index.js -o dist && pnpm run postbuild",
+    "build": "pnpm run prebuild && tsc --project tsconfig.build.json && ncc build lib/index.js -o dist && pnpm run postbuild",
     "postbuild": "pnpm run json:post",
     "test": "vitest",
     "lint:es": "eslint .",
@@ -43,8 +43,7 @@
     "@actions/github": "^6.0.0",
     "@commitlint/config-conventional": "^18.1.0",
     "@commitlint/lint": "^18.1.0",
-    "@commitlint/load": "^18.2.0",
-    "esm-to-cjs": "^1.2.1"
+    "@commitlint/load": "^18.2.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.1.0",
