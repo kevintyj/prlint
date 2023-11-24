@@ -1,5 +1,6 @@
 # commited dist files
 !dist
+lib
 
 # dependencies
 node_modules

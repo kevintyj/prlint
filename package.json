@@ -1,7 +1,7 @@
 {
   "name": "@kevintyj/prlint",
-  "type": "module",
   "version": "0.2.0",
+  "type": "module",
   "private": false,
   "author": "Kevin Taeyoon Jin <hello@kevintyj.com>",
   "license": "BSD-3-Clause",
@@ -19,19 +19,22 @@
     "provenance": true
   },
   "exports": {
-    "import": "./dist/index.js",
-    "require": "./dist/index.cjs",
     "default": "./dist/index.js"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
   "scripts": {
     "prepare": "husky install",
     "watch": "tsup --watch",
-    "build": "ncc build src/index.ts -o dist",
+    "json:pre": "json -I -f package.json -e 'this.type = \"commonjs\"'",
+    "json:post": "json -I -f package.json -e 'this.type = \"module\"'",
+    "prebuild": "pnpm run clean:build && pnpm run json:pre",
+    "build": "pnpm run prebuild && tsc && ncc build lib/index.js -o dist && pnpm run postbuild",
+    "postbuild": "pnpm run json:post",
     "test": "vitest",
     "lint:es": "eslint .",
-    "clean": "git clean -fdX",
+    "clean:build": "rimraf lib dist",
+    "clean:git": "git clean -fdX",
     "ci": "pnpm run lint:es && pnpm run build",
     "release": "pnpm run ci && changeset publish"
   },
@@ -52,7 +55,9 @@
     "@vercel/ncc": "^0.38.1",
     "eslint": "^8.54.0",
     "husky": "^8.0.3",
+    "json": "^11.0.0",
     "lint-staged": "^15.1.0",
+    "rimraf": "^5.0.5",
     "tsup": "^7.2.0",
     "typescript": "^5.2.2",
     "vitest": "^0.34.6"

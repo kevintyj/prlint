@@ -1,26 +1,26 @@
 {
-	"compilerOptions": {
-		/* Build */
-		"target": "es2017",
-		"lib": ["ESNext", "DOM", "DOM.Iterable"],
-		"module": "ESNext",
-		"declaration": true,
-		"declarationDir": "dist/types",
-		"outDir": "dist",
-		"esModuleInterop": true,
-		"noEmit": true,
+  "compilerOptions": {
+    /* Build */
+    "target": "es2015",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "module": "commonjs",
+    "declaration": true,
+    "declarationDir": "lib/types",
+    "outDir": "lib",
+    "rootDir": "src",
+    "esModuleInterop": true,
 
-		/* Bundler mode */
-		"moduleResolution": "bundler",
-		"resolveJsonModule": true,
-		"isolatedModules": true,
+    /* Bundler mode */
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
 
-		/* Linting */
-		"strict": true,
-		"noFallthroughCasesInSwitch": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		"forceConsistentCasingInFileNames": true
-	},
-	"exclude": ["node_modules", "dist"]
+    /* Linting */
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "exclude": ["node_modules", "dist", "tsup.config.ts", "__tests__"]
 }
