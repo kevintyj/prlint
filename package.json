@@ -1,6 +1,6 @@
 {
   "name": "@kevintyj/prlint",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "type": "module",
   "private": false,
   "author": "Kevin Taeyoon Jin <hello@kevintyj.com>",
