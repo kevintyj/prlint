@@ -5,7 +5,6 @@ import load from '@commitlint/load';
 import lint from '@commitlint/lint';
 import { setOutput } from '@actions/core';
 import logWithTile from './log';
-import handleError from './errHandle';
 
 const defaultConfig = {
 	extends: '@commitlint/config-conventional',
@@ -28,10 +27,6 @@ function getLintOptions(configuration: QualifiedConfig): LintOptions {
 	};
 }
 
-export const testLintOptions = {
-	getLintOptions,
-};
-
 /**
  * Convert a ESM js file to CJS
  * @param {string} inputFilePath - Input file path for conversion
@@ -50,9 +45,15 @@ async function convertESMtoCJS(inputFilePath: string, outputFilePath: string) {
 		fs.writeFileSync(outputFilePath, cjsContent, 'utf8');
 	}
 	catch (err) {
-		handleError(err);
+		// @ts-expect-error explicit type unknown for error
+		throw new Error(logWithTile('File read failed!', err));
 	}
 }
+
+export const testLintOptions = {
+	getLintOptions,
+	convertESMtoCJS,
+};
 
 /**
  * Utilizes the {@link lint} function to verify the title with options fetched using {@link getLintOptions}
