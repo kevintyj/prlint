@@ -1,5 +1,11 @@
 # @kevintyj/prlint
 
+## 1.0.1
+
+### Patch Changes
+
+- [#6](https://github.com/kevintyj/prlint/pull/6) [`1d0ac4f`](https://github.com/kevintyj/prlint/commit/1d0ac4f2affd791a57a29b072ba7bc688a9ea7f1) Thanks [@kevintyj](https://github.com/kevintyj)! - Add ESM support for commitlint config
+
 ## 1.0.0
 
 ### Major Changes
