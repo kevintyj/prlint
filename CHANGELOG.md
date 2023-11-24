@@ -1,5 +1,11 @@
 # @kevintyj/prlint
 
+## 1.1.0
+
+### Minor Changes
+
+- [#9](https://github.com/kevintyj/prlint/pull/9) [`3256453`](https://github.com/kevintyj/prlint/commit/325645397da52ccaf94385d87a3a4a6ace34c8d0) Thanks [@kevintyj](https://github.com/kevintyj)! - Add support for custom configuration files
+
 ## 1.0.1
 
 ### Patch Changes
