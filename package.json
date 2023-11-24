@@ -28,7 +28,7 @@
   "scripts": {
     "prepare": "husky install",
     "watch": "tsup --watch",
-    "build": "tsup",
+    "build": "ncc build src/index.ts -o dist",
     "test": "vitest",
     "lint:es": "eslint .",
     "clean": "git clean -fdX",
@@ -49,6 +49,7 @@
     "@commitlint/cli": "^18.4.3",
     "@commitlint/types": "^18.1.0",
     "@types/node": "^20.9.0",
+    "@vercel/ncc": "^0.38.1",
     "eslint": "^8.54.0",
     "husky": "^8.0.3",
     "lint-staged": "^15.1.0",
