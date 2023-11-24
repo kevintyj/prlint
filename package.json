@@ -36,7 +36,7 @@
     "lint:es": "eslint .",
     "clean:build": "rimraf lib dist",
     "clean:git": "git clean -fdX",
-    "ci": "pnpm run lint:es && vitest runs && pnpm run build",
+    "ci": "pnpm run lint:es && vitest run && pnpm run build",
     "release": "pnpm run ci && changeset publish"
   },
   "dependencies": {
