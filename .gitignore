@@ -19,5 +19,7 @@ gitignore
 .DS_Store
 Thumbs.db
 
-# Tes files
+# Test files
 coverage
+commitlint-cjs.config.cjs
+!coverage/coverage-final.json

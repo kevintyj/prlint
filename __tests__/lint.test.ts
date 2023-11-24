@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import load from '@commitlint/load';
 import { testLintOptions, verifyTitle } from '../src/lint';
 
-const { getLintOptions } = testLintOptions;
+const { getLintOptions, convertESMtoCJS } = testLintOptions;
 
 const emptyConfigOption = {
 	defaultIgnores: true,
@@ -70,5 +70,7 @@ describe('commitlint', async () => {
 		await expect(verifyTitle('test: Add test suites', 'commitlint.config.js')).resolves.toEqual(true);
 	});
 
-	// TODO: Add tests for esm-to-cjs
+	it('return error if file for esm conversion does not exist', async () => {
+		await expect(convertESMtoCJS('dne.js', 'dne.cjs')).rejects.toThrowError(/no such file or directory/);
+	});
 });
