@@ -1,8 +1,5 @@
-# dist
-dist
-
 # commited dist files
-!packages/commitlint/dist
+!dist
 
 # dependencies
 node_modules

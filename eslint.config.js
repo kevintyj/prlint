@@ -7,7 +7,6 @@ export default antfu(
 			tsconfigPath: 'tsconfig.json',
 		},
 		stylistic: {
-			indent: 'tab',
 			quotes: 'single',
 		},
 		ignores: [
@@ -25,14 +24,21 @@ export default antfu(
 		},
 	},
 	{
-		files: ['tsconfig.json', 'package.json'],
 		rules: {
-			'jsonc/sort-keys': 'off',
+			'style/indent': ['error', 'tab', {
+				SwitchCase: 1,
+			}],
+			'style/no-tabs': ['error', { allowIndentationTabs: true }],
+			'style/no-mixed-spaces-and-tabs': ['error', 'smart-tabs'],
+			'style/array-bracket-newline': ['error', { multiline : true }],
+			'style/array-element-newline': ['error', 'consistent'],
+			'style/semi': ['error', 'always'],
 		},
 	},
 	{
+		files: ['tsconfig.json', 'package.json'],
 		rules: {
-			'style/semi': ['error', 'always'],
+			'jsonc/sort-keys': 'off',
 		},
 	},
 );
