@@ -1,5 +1,11 @@
 # @kevintyj/prlint
 
+## 0.1.1
+
+### Patch Changes
+
+- [`c58f797`](https://github.com/kevintyj/prlint/commit/c58f7973eed41af5641f677b821ba3c67cd26f9e) Thanks [@kevintyj](https://github.com/kevintyj)! - Change ci entry to mjs
+
 ## 0.1.0
 
 ### Minor Changes
