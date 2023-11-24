@@ -27,7 +27,7 @@
     "prepare": "husky install",
     "watch": "tsup --watch",
     "json:pre": "json -I -f package.json -e 'this.type = \"commonjs\"'",
-    "json:post": "json -I -f package.json -e 'this.type = \"module\"'",
+    "json:post": "json -I -f package.json -e 'this.type = \"module\"' && echo '{\"type\": \"commonjs\"}' > dist/package.json",
     "prebuild": "pnpm run clean:build && pnpm run json:pre",
     "build": "pnpm run prebuild && tsc && ncc build lib/index.js -o dist && pnpm run postbuild",
     "postbuild": "pnpm run json:post",
