@@ -43,7 +43,8 @@
     "@actions/github": "^6.0.0",
     "@commitlint/config-conventional": "^18.1.0",
     "@commitlint/lint": "^18.1.0",
-    "@commitlint/load": "^18.2.0"
+    "@commitlint/load": "^18.2.0",
+    "esm-to-cjs": "^1.2.1"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.1.0",
