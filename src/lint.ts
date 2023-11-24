@@ -82,6 +82,8 @@ export async function verifyTitle(title: string, configPath: string = ''): Promi
 		return true;
 	}
 	else {
+		setOutput('lint-status', '❌ Commitlint tests failed\n');
+		setOutput('lint-details', linterResult);
 		const errors = linterResult.errors.map((error) => {
 			return `${error.name}: ${error.message}`;
 		}).join('\n');

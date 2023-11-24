@@ -41,28 +41,37 @@ jobs:
           cache: pnpm
       - name: 🛠️Install dependencies for prlint
         run: pnpm install @commitlint/config-conventional
-      - name: 🧾Print versions
-        run: |
-          git --version
-          node --version
-          pnpm --version
-          pnpm commitlint --version
       - name: 📝Validate PR title with commitlint
         uses: kevintyj/prlint@v1
+        # Optional
+        with:
+          cl-config: commitlint-cjs.config.cjs
 ```
 The above action only check's out the current repository to fetch the commitlint configuration file.
 PNPM and node is used to install necessary dependencies, then config-conventional is used as a default config.
 When using the above configuration, `pnpm-lock.yaml` is required. Please use npm and node if `package-lock.json` is used.
 
+### Inputs
+#### `cl-config`
+**Optional** Path to commit lint config. Default : `'commitlint.config.js'`
+
+### Outputs 
+#### `lint-status`
+Status of the lint result. Returns `✅ Commitlint tests passed!` if successful and `❌ Commitlint tests failed` if 
+linter tests fail.
+#### `lint-details`
+Output of the commitlint result.
+
 ### Limitations
-The current action of Prlint only accepts `commitlint.config.js` based configurations on commitlint. 
-`v1.0.1` introduced support for ESM based configuration files. However, currently there is no support for configuration 
-files of different name in the repository such as `commitlintrc` files especially of different file types. 
-Future support for an `js` file input will be enabled through an optional action input. However, no support for `json` 
-or `yaml` files are currently planned. Please feel free to contribute to add aditional features!
+The current action of Prlint only accepts javascript based configurations on commitlint. 
+`v1.0.1` introduced support for ESM based configuration files. `v1.1.0` introduced support for custom config file names.
+However, due to ESM support added in `v1.0.1` non `js` config files such as `yaml` or `json` is not supported.
 
 Even if the project does not use `config-conventional`, the Prlint uses the configuration as a fallback, therefore the 
-project must contain the `config-conventional` package as a development dependency. 
+project must contain the `config-conventional` package as a development dependency.
+
+## Changelog
+See [CHANGELOG](CHANGELOG.md) for the release details
 
 ## License
 
