@@ -63,8 +63,8 @@ async function convertESMtoCJS(inputFilePath: string, outputFilePath: string) {
 export async function verifyTitle(title: string, configPath: string = ''): Promise<boolean> {
 	const outputConfig = async () => {
 		if (fs.existsSync(configPath)) {
-			await convertESMtoCJS(configPath, 'commitlint-cjs.config.js');
-			return await load({}, { file: 'commitlint-cjs.config.js', cwd: process.cwd() });
+			await convertESMtoCJS(configPath, 'commitlint-cjs.config.cjs');
+			return await load({}, { file: 'commitlint-cjs.config.cjs', cwd: process.cwd() });
 		}
 		else {
 			return await load(defaultConfig);
