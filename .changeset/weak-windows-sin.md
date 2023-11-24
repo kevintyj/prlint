@@ -1,5 +1,5 @@
 ---
-"@kevintyj/prlint": patch
+"@kevintyj/prlint": major 
 ---
 
 Minify build output using cjs output
