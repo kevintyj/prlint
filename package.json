@@ -1,7 +1,7 @@
 {
   "name": "@kevintyj/prlint",
   "type": "module",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "private": false,
   "author": "Kevin Taeyoon Jin <hello@kevintyj.com>",
   "license": "BSD-3-Clause",
