@@ -1,5 +1,11 @@
 # @kevintyj/prlint
 
+## 0.2.0
+
+### Minor Changes
+
+- [`ac016e5`](https://github.com/kevintyj/prlint/commit/ac016e54124815f458b6ed7362f7424dff0b4613) Thanks [@kevintyj](https://github.com/kevintyj)! - Change build strategy to @vercel/ncc using webpack
+
 ## 0.1.1
 
 ### Patch Changes
