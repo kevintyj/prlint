@@ -2,9 +2,10 @@ name: Commitlint (prlint)
 author: Kevin Taeyoon Jin <hello@kevintyj.com>
 description: Ensure PR title match commitlint config
 runs:
-  using: node20
-  main: dist/index.js
-  args: [--entry-type=commonjs]
+  using: composite
+  steps:
+    - run: node $GITHUB_ACTION_PATH/dist/index.js --experimental-default-type=commonjs
+      shell: bash
 inputs:
   cl-config:
     description: Path to commit lint config (commitlint.config.js)
