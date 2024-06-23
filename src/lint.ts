@@ -87,27 +87,37 @@ export const testLintOptions = {
  */
 export async function verifyTitle(title: string, configPath: string = ''): Promise<boolean> {
 	const outputConfig = async () => {
-		if (fs.existsSync(configPath)) {
-			await convertCJStoESM(configPath, 'commitlint-action.config.mjs');
+		const ESM_FILE_NAME = 'commitlint-action.config.mjs';
+		let CompiledConfig: QualifiedConfig = await load({});
 
-			// eslint-disable-next-line no-console
-			console.log(`Conversion complete! Files: ${
-				fs.readdirSync(process.cwd(), { withFileTypes: true })
-					.filter(item => !item.isDirectory())
-					.map(item => item.name).toString()
-			}`);
+		try {
+			await convertCJStoESM(configPath, ESM_FILE_NAME);
 
-			// eslint-disable-next-line no-console
-			console.log(`${process.cwd()}`);
+			if (fs.existsSync(ESM_FILE_NAME)) {
+				// eslint-disable-next-line no-console
+				console.log(
+					`Conversion complete! \ncwd: ${process.cwd()} \nfiles: ${
+						fs.readdirSync(process.cwd(), { withFileTypes: true })
+							.filter(item => !item.isDirectory())
+							.map(item => item.name).toString()}`,
+				);
 
-			return await load({}, { file: 'commitlint-action.config.mjs', cwd: process.cwd() });
+				CompiledConfig = await load({}, { file: ESM_FILE_NAME, cwd: process.cwd() });
+				// eslint-disable-next-line no-console
+				console.log(`Returning from explicit CJS -> ESM`);
+				return CompiledConfig;
+			}
 		}
-		else {
-			return await load(defaultConfig);
+		catch (err) {
+			CompiledConfig = await load({});
+			// eslint-disable-next-line no-console
+			console.log(`Returning from lookup`);
+			return CompiledConfig;
 		}
 	};
 
-	const commitlintConfig: QualifiedConfig = await outputConfig();
+	// TODO: Investigate TS type checking error
+	const commitlintConfig: QualifiedConfig = await outputConfig() ?? await load(defaultConfig);
 
 	const linterResult = await lint(title, commitlintConfig.rules, getLintOptions(commitlintConfig));
 
