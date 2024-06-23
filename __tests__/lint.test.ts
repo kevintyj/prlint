@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import load from '@commitlint/load';
 import { testLintOptions, verifyTitle } from '../src/lint';
 
-const { getLintOptions, convertESMtoCJS } = testLintOptions;
+const { getLintOptions, convertESMtoCJS, convertCJStoESM } = testLintOptions;
 
 const emptyConfigOption = {
 	defaultIgnores: true,
@@ -72,5 +72,9 @@ describe('commitlint', async () => {
 
 	it('return error if file for esm conversion does not exist', async () => {
 		await expect(convertESMtoCJS('dne.js', 'dne.cjs')).rejects.toThrowError(/no such file or directory/);
+	});
+
+	it('return error if file for cjs conversion does not exist', async () => {
+		await expect(convertCJStoESM('dne.js', 'dne.mjs')).rejects.toThrowError(/no such file or directory/);
 	});
 });

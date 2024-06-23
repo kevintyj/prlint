@@ -1,6 +1,6 @@
 import process from 'node:process';
 import * as fs from 'node:fs';
-import type { LintOptions, ParserOptions, QualifiedConfig } from '@commitlint/types';
+import type { LintOptions, QualifiedConfig } from '@commitlint/types';
 import load from '@commitlint/load';
 import lint from '@commitlint/lint';
 import { setOutput } from '@actions/core';
@@ -20,7 +20,7 @@ function getLintOptions(configuration: QualifiedConfig): LintOptions {
 		defaultIgnores: configuration.defaultIgnores ? configuration.defaultIgnores : true,
 		ignores: configuration.ignores ? configuration.ignores : undefined,
 		parserOpts: typeof configuration.parserPreset?.parserOpts == 'object'
-			? configuration.parserPreset.parserOpts as ParserOptions
+			? configuration.parserPreset.parserOpts as LintOptions['parserOpts']
 			: undefined,
 		plugins: configuration.plugins ? configuration.plugins : undefined,
 		helpUrl: configuration.helpUrl ? configuration.helpUrl : undefined,
@@ -50,9 +50,33 @@ async function convertESMtoCJS(inputFilePath: string, outputFilePath: string) {
 	}
 }
 
+/**
+ * Convert a CJS js file to ESM
+ * @param {string} inputFilePath - Input file path for conversion
+ * @param {string} outputFilePath - Output file path
+ */
+async function convertCJStoESM(inputFilePath: string, outputFilePath: string) {
+	try {
+		const cjsContent = fs.readFileSync(inputFilePath, 'utf8');
+
+		// Replace require and module.exports using regex
+		const esmContent = cjsContent
+			.replace(/const (.+?) = require\(['"](.+?)['"]\)/g, 'import $1 from \'$2\'')
+			.replace(/module\.exports = (\w+)/g, 'export default $1')
+			.replace(/exports\.(\w+) = (\w+)/g, 'export const $1 = $2');
+
+		fs.writeFileSync(outputFilePath, esmContent, 'utf8');
+	}
+	catch (err) {
+		// @ts-expect-error explicit type unknown for error
+		throw new Error(`File read failed: ${err.message}`);
+	}
+}
+
 export const testLintOptions = {
 	getLintOptions,
 	convertESMtoCJS,
+	convertCJStoESM,
 };
 
 /**
@@ -64,8 +88,8 @@ export const testLintOptions = {
 export async function verifyTitle(title: string, configPath: string = ''): Promise<boolean> {
 	const outputConfig = async () => {
 		if (fs.existsSync(configPath)) {
-			await convertESMtoCJS(configPath, 'commitlint-cjs.config.cjs');
-			return await load({}, { file: 'commitlint-cjs.config.cjs', cwd: process.cwd() });
+			await convertCJStoESM(configPath, 'commitlint-cjs.config.mjs');
+			return await load({}, { file: 'commitlint-cjs.config.mjs', cwd: process.cwd() });
 		}
 		else {
 			return await load(defaultConfig);
