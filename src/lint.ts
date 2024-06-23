@@ -88,8 +88,8 @@ export const testLintOptions = {
 export async function verifyTitle(title: string, configPath: string = ''): Promise<boolean> {
 	const outputConfig = async () => {
 		if (fs.existsSync(configPath)) {
-			await convertCJStoESM(configPath, 'commitlint-cjs.config.mjs');
-			return await load({}, { file: 'commitlint-cjs.config.mjs', cwd: process.cwd() });
+			await convertCJStoESM(configPath, 'commitlint-action.config.mjs');
+			return await load({}, { file: 'commitlint-action.config.mjs', cwd: process.cwd() });
 		}
 		else {
 			return await load(defaultConfig);
