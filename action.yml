@@ -4,7 +4,7 @@ description: Ensure PR title match commitlint config
 runs:
   using: composite
   steps:
-    - run: node $GITHUB_ACTION_PATH/dist/index.js --experimental-default-type=commonjs
+    - run: node $GITHUB_ACTION_PATH/dist/index.cjs --experimental-default-type=commonjs
       shell: bash
 inputs:
   cl-config:

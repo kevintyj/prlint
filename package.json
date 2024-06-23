@@ -26,11 +26,12 @@
   "scripts": {
     "prepare": "husky install",
     "watch": "tsup --watch",
+    "rename": "npx rename-cli 'dist/index.js' 'index.cjs'",
     "json:pre": "json -I -f package.json -e 'this.type = \"commonjs\"'",
     "json:post": "json -I -f package.json -e 'this.type = \"module\"' && echo '{\"type\": \"commonjs\"}' > dist/package.json",
     "prebuild": "pnpm run clean:build && pnpm run json:pre",
     "build": "pnpm run test:coverage && pnpm run prebuild && tsc --project tsconfig.build.json && ncc build lib/index.js -o dist && pnpm run postbuild",
-    "postbuild": "pnpm run json:post",
+    "postbuild": "pnpm run json:post && pnpm run rename",
     "test": "vitest",
     "test:coverage": "vitest run --coverage.enabled --coverage.reporter='json' ",
     "lint:es": "eslint .",
