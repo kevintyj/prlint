@@ -89,6 +89,17 @@ export async function verifyTitle(title: string, configPath: string = ''): Promi
 	const outputConfig = async () => {
 		if (fs.existsSync(configPath)) {
 			await convertCJStoESM(configPath, 'commitlint-action.config.mjs');
+
+			// eslint-disable-next-line no-console
+			console.log(`Conversion complete! Files: ${
+				fs.readdirSync(process.cwd(), { withFileTypes: true })
+					.filter(item => !item.isDirectory())
+					.map(item => item.name).toString()
+			}`);
+
+			// eslint-disable-next-line no-console
+			console.log(`${process.cwd()}`);
+
 			return await load({}, { file: 'commitlint-action.config.mjs', cwd: process.cwd() });
 		}
 		else {

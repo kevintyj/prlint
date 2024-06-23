@@ -1,7 +1,22 @@
+// Shim globals in esm bundle
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+
+const getFilename = () => fileURLToPath(import.meta.url);
+const getDirname = () => path.dirname(getFilename());
+
+// eslint-disable-next-line no-restricted-globals
+global.__dirname = getDirname();
+// eslint-disable-next-line no-restricted-globals
+global.__filename = getFilename();
+
+/* eslint-disable import/first */
 import * as github from '@actions/github';
 import * as core from '@actions/core';
 import handleError from './errHandle';
 import { verifyTitle } from './lint';
+
+/* eslint-enable import/first */
 
 type pullRequest = {
 	title: string

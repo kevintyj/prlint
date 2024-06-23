@@ -17,6 +17,9 @@ importers:
       '@commitlint/config-conventional':
         specifier: ^19.2.2
         version: 19.2.2
+      '@commitlint/config-validator':
+        specifier: ^19.0.3
+        version: 19.0.3
       '@commitlint/lint':
         specifier: ^19.2.2
         version: 19.2.2
