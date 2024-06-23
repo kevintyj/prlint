@@ -42,7 +42,7 @@ const emptyConfigOptionNoParserOpts = {
 describe('commitlint', async () => {
 	const emptyConfig = await load({});
 	const defaultConfig = await load({ extends: '@commitlint/config-conventional' });
-	const currentConfig = await load({}, { file: 'commitlint.config.js', cwd: process.cwd() });
+	const currentConfig = await load({}, { file: 'commitlint.config.mjs', cwd: process.cwd() });
 
 	it('configurations return proper extensions and rules', () => {
 		expect(emptyConfig).toHaveProperty('extends', ['@commitlint/config-conventional']);
@@ -61,13 +61,13 @@ describe('commitlint', async () => {
 	it('throw error on incorrect title', async () => {
 		await expect(verifyTitle('foo: bar')).rejects.toThrowError(/check failed/);
 		await expect(verifyTitle('foo: bar', 'something.config.js')).rejects.toThrowError(/subject-case/);
-		await expect(verifyTitle('test: add tests', 'commitlint.config.js')).rejects.toThrowError(/sentence-case/);
+		await expect(verifyTitle('test: add tests', 'commitlint.config.mjs')).rejects.toThrowError(/sentence-case/);
 	});
 
 	it('return true if title is valid', async () => {
 		await expect(verifyTitle('fix: Add new commets')).resolves.toEqual(true);
 		await expect(verifyTitle('feat: Title is short and nice!', 'something.config.js')).resolves.toEqual(true);
-		await expect(verifyTitle('test: Add test suites', 'commitlint.config.js')).resolves.toEqual(true);
+		await expect(verifyTitle('test: Add test suites', 'commitlint.config.mjs')).resolves.toEqual(true);
 	});
 
 	it('return error if file for esm conversion does not exist', async () => {

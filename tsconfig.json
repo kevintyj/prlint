@@ -3,7 +3,7 @@
     /* Build */
     "target": "es2015",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "module": "ES2022",
+    "module": "commonjs",
     "declaration": true,
     "declarationDir": "lib/types",
     "outDir": "lib",
