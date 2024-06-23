@@ -3,7 +3,7 @@ author: Kevin Taeyoon Jin <hello@kevintyj.com>
 description: Ensure PR title match commitlint config
 runs:
   using: node20
-  main: dist/index.js
+  main: node dist/index.js --entry-type=commonjs
 inputs:
   cl-config:
     description: Path to commit lint config (commitlint.config.js)
