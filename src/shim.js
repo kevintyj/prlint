@@ -14,4 +14,4 @@ const getDirname = () => path.dirname(getFilename());
 const __dirname = getDirname();
 const __filename = getFilename();
 // eslint-disable-next-line unused-imports/no-unused-vars
-const require = Module.createRequire(import.meta.url);
+const require = Module.createRequire(__dirname);
