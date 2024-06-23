@@ -32,4 +32,4 @@ jobs:
       - name: 📝Validate PR title with commitlint
         uses: ./
         with:
-          cl-config: commitlint.config.mjs
+          cl-config: commitlint.config.js

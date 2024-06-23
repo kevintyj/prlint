@@ -1,6 +1,7 @@
 {
   "name": "@kevintyj/prlint",
   "version": "1.1.0",
+  "type": "module",
   "private": false,
   "author": "Kevin Taeyoon Jin <hello@kevintyj.com>",
   "license": "BSD-3-Clause",
@@ -34,12 +35,7 @@
     "shim": "node scripts/shim.cjs",
     "prebuild": "pnpm run clean:build && pnpm run json:ts",
     "build": "pnpm run test:coverage && pnpm run prebuild && ncc build src/index.ts -o dist && pnpm run shim && pnpm run postbuild",
-    "rename:cjs": "npx rename-cli 'dist/index.js' 'index.cjs'",
-    "json:cjs:pre": "json -I -f package.json -e 'this.type = \"commonjs\"'",
-    "json:cjs:post": "json -I -f package.json -e 'this.type = \"module\"' && echo '{\"type\": \"commonjs\"}' > dist/package.json",
-    "prebuild:cjs": "pnpm run clean:build && pnpm run json:cjs:pre",
-    "build:cjs": "pnpm run test:coverage && pnpm run prebuild:cjs && tsc --project tsconfig.build.json && ncc build lib/index.js -o dist && pnpm run rename:cjs && pnpm run postbuild",
-    "postbuild": "pnpm run json:cjs:post",
+    "postbuild": "pnpm run json:ts:post && npx rimraf 'tsconfig.build-temp.json' && npx rimraf 'commitlint-action.config.mjs' && pnpm run rename:js && pnpm run schema:post",
     "test": "vitest",
     "test:coverage": "vitest run --coverage.enabled --coverage.reporter='json' ",
     "lint:es": "eslint .",
@@ -77,6 +73,5 @@
   "lint-staged": {
     "*": "eslint --fix"
   },
-  "packageManager": "pnpm@9.4.0",
-  "type": "module"
+  "packageManager": "pnpm@9.4.0"
 }
