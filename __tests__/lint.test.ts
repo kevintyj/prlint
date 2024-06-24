@@ -5,6 +5,7 @@ import { testLintOptions, verifyTitle } from '../src/lint';
 
 const { getLintOptions, convertESMtoCJS } = testLintOptions;
 
+/* eslint-disable regexp/no-super-linear-backtracking */
 const emptyConfigOption = {
 	defaultIgnores: true,
 	helpUrl: 'https://github.com/conventional-changelog/commitlint/#what-is-commitlint',
@@ -30,6 +31,7 @@ const emptyConfigOption = {
 	},
 	plugins: {},
 };
+/* eslint-enable regexp/no-super-linear-backtracking */
 
 const emptyConfigOptionNoParserOpts = {
 	defaultIgnores: true,

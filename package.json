@@ -21,16 +21,14 @@
   "exports": {
     "default": "./dist/index.js"
   },
-  "main": "lib/index.js",
-  "types": "lib/types/index.d.ts",
   "scripts": {
     "prepare": "husky install",
     "watch": "tsup --watch",
-    "json:pre": "json -I -f package.json -e 'this.type = \"commonjs\"'",
-    "json:post": "json -I -f package.json -e 'this.type = \"module\"' && echo '{\"type\": \"commonjs\"}' > dist/package.json",
-    "prebuild": "pnpm run clean:build && pnpm run json:pre",
-    "build": "pnpm run test:coverage && pnpm run prebuild && tsc --project tsconfig.build.json && ncc build lib/index.js -o dist && pnpm run postbuild",
-    "postbuild": "pnpm run json:post",
+    "json:ts:pre": "npx ncp 'tsconfig.json' 'tsconfig.build-temp.json' && json -I -f tsconfig.build.json -e 'this.extends = \"./tsconfig.build-temp.json\"' && npx ncp 'tsconfig.build.json' 'tsconfig.json'",
+    "json:ts:post": "json -I -f tsconfig.build.json -e 'this.extends = \"./tsconfig.json\"' && npx ncp 'tsconfig.build-temp.json' 'tsconfig.json'",
+    "prebuild": "pnpm run clean:build && pnpm run json:ts:pre",
+    "build": "pnpm run test:coverage && pnpm run prebuild && ncc build src/index.ts -o dist --target es2022 && pnpm run postbuild",
+    "postbuild": "pnpm run json:ts:post && npx rimraf 'tsconfig.build-temp.json' && npx rimraf 'commitlint-action.config.cjs'",
     "test": "vitest",
     "test:coverage": "vitest run --coverage.enabled --coverage.reporter='json' ",
     "lint:es": "eslint .",

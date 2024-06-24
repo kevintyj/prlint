@@ -1,6 +1,6 @@
 import process from 'node:process';
 import * as fs from 'node:fs';
-import type { LintOptions, ParserOptions, QualifiedConfig } from '@commitlint/types';
+import type { LintOptions, QualifiedConfig } from '@commitlint/types';
 import load from '@commitlint/load';
 import lint from '@commitlint/lint';
 import { setOutput } from '@actions/core';
@@ -20,7 +20,7 @@ function getLintOptions(configuration: QualifiedConfig): LintOptions {
 		defaultIgnores: configuration.defaultIgnores ? configuration.defaultIgnores : true,
 		ignores: configuration.ignores ? configuration.ignores : undefined,
 		parserOpts: typeof configuration.parserPreset?.parserOpts == 'object'
-			? configuration.parserPreset.parserOpts as ParserOptions
+			? configuration.parserPreset.parserOpts as LintOptions['parserOpts']
 			: undefined,
 		plugins: configuration.plugins ? configuration.plugins : undefined,
 		helpUrl: configuration.helpUrl ? configuration.helpUrl : undefined,
@@ -40,6 +40,7 @@ async function convertESMtoCJS(inputFilePath: string, outputFilePath: string) {
 		const cjsContent = esmContent
 			.replace(/import (.+?) from ['"](.+?)['"]/g, 'const $1 = require(\'$2\')')
 			.replace(/export default/g, 'module.exports =')
+			// eslint-disable-next-line regexp/no-unused-capturing-group
 			.replace(/export (const|let|var|function|class) (\w+)/g, 'exports.$2 = $2');
 
 		fs.writeFileSync(outputFilePath, cjsContent, 'utf8');

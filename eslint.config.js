@@ -20,6 +20,7 @@ export default antfu(
 				'ts/consistent-type-definitions': ['error', 'type'],
 				'ts/no-unsafe-assignment': 'warn',
 				'ts/no-unsafe-member-access': 'warn',
+				'ts/strict-boolean-expressions': 'warn'
 			},
 		},
 	},
@@ -41,4 +42,10 @@ export default antfu(
 			'jsonc/sort-keys': 'off',
 		},
 	},
+	{
+		files: ['**/*.md'],
+		rules: {
+			'style/no-trailing-spaces': 'warn'
+		}
+	}
 );
