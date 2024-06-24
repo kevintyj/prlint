@@ -23,8 +23,7 @@ export default antfu(
 				'ts/strict-boolean-expressions': 'warn'
 			},
 		},
-	},
-	{
+	}, {
 		rules: {
 			'style/indent': ['error', 'tab', {
 				SwitchCase: 1,
@@ -35,17 +34,20 @@ export default antfu(
 			'style/array-element-newline': ['error', 'consistent'],
 			'style/semi': ['error', 'always'],
 		},
-	},
-	{
+	}, {
 		files: ['tsconfig.json', 'package.json'],
 		rules: {
 			'jsonc/sort-keys': 'off',
 		},
-	},
-	{
+	}, {
 		files: ['**/*.md'],
 		rules: {
 			'style/no-trailing-spaces': 'warn'
+		}
+	}, {
+		files: ['__tests__/**/*.test.ts'],
+		rules: {
+			'ts/no-unsafe-call': 'off'
 		}
 	}
 );

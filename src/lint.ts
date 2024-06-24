@@ -2,7 +2,7 @@ import type { LintOptions, QualifiedConfig } from '@commitlint/types';
 import load from '@commitlint/load';
 import lint from '@commitlint/lint';
 import { setOutput } from '@actions/core';
-import logWithTile from './log';
+import logWithTile from './log.js';
 
 /**
  * Conditionally sets values from configuration as a LintOptions object

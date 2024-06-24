@@ -2,8 +2,8 @@ import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 import { createRequire } from 'node:module';
 import * as github from '@actions/github';
-import handleError from './errHandle';
-import { verifyTitle } from './lint';
+import handleError from './errHandle.js';
+import { verifyTitle } from './lint.js';
 
 /* eslint-disable no-restricted-globals */
 global.__filename = fileURLToPath(import.meta.url);
@@ -33,4 +33,4 @@ async function run(): Promise<void> {
 	await verifyTitle(pullRequestObject.title);
 }
 
-run().catch(handleError, false);
+await run().catch(err => handleError(err, false));

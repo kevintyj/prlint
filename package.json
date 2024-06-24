@@ -33,9 +33,10 @@
     "test": "vitest",
     "test:coverage": "vitest run --coverage.enabled --coverage.reporter='json' ",
     "lint:es": "eslint .",
+    "lint:ci": "eslint src && eslint __tests__",
     "clean:build": "rimraf lib dist",
     "clean:git": "git clean -fdX",
-    "ci": "pnpm run lint:es && vitest run && pnpm run build",
+    "ci": "pnpm run lint:ci && vitest run && pnpm run build",
     "release": "pnpm run ci && changeset publish"
   },
   "dependencies": {
