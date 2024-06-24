@@ -26,7 +26,7 @@
     "watch": "tsup --watch",
     "json:ts:pre": "npx ncp 'tsconfig.json' 'tsconfig.build-temp.json' && json -I -f tsconfig.build.json -e 'this.extends = \"./tsconfig.build-temp.json\"' && npx ncp 'tsconfig.build.json' 'tsconfig.json'",
     "prebuild": "pnpm run clean:build && pnpm run json:ts:pre",
-    "build": "pnpm run test:coverage && pnpm run prebuild && ncc build src/index.ts -o dist --target es2022 && pnpm run postbuild",
+    "build": "pnpm run test:coverage && pnpm run prebuild && ncc build src/index.ts -o dist --target es2022 -s && pnpm run postbuild",
     "postbuild": "pnpm run json:ts:post && pnpm run schema:post && npx rimraf 'tsconfig.build-temp.json' && npx rimraf 'commitlint-action.config.cjs'",
     "json:ts:post": "json -I -f tsconfig.build.json -e 'this.extends = \"./tsconfig.json\"' && npx ncp 'tsconfig.build-temp.json' 'tsconfig.json'",
     "schema:post": "npx ncp 'node_modules/@commitlint/config-validator/lib/commitlint.schema.json' 'dist/commitlint.schema.json'",

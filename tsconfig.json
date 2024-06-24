@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     /* Build */
-    "target": "es2015",
+    "target": "es2022",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "module": "commonjs",
+    "module": "es2022",
     "declaration": true,
     "declarationDir": "lib/types",
     "outDir": "lib",
