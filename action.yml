@@ -4,11 +4,6 @@ description: Ensure PR title match commitlint config
 runs:
   using: node20
   main: dist/index.js
-inputs:
-  cl-config:
-    description: Path to commit lint config (commitlint.config.js)
-    default: commitlint.config.js
-    required: false
 outputs:
   lint-status:
     description: The status of the PR lint

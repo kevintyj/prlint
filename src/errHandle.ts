@@ -8,7 +8,7 @@ import { error, setFailed } from '@actions/core';
 function handleError(err: Error | string | unknown, fail: boolean = true) {
 	if (err instanceof Error) {
 		error(err);
-		fail && setFailed(err.message);
+		fail && setFailed(`Error Name: ${err.name} \nMessage: ${err.message} \nStack: ${err.stack}`);
 	}
 	else {
 		const message: string = typeof err == 'string' ? err : 'Unknown error has occurred!';
