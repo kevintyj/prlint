@@ -35736,15 +35736,31 @@ function handleError(err, fail = true) {
 /***/ ((module, __unused_webpack___webpack_exports__, __nccwpck_require__) => {
 
 __nccwpck_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
-/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(5942);
-/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _errHandle_js__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(3281);
-/* harmony import */ var _lint_js__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(3011);
+/* harmony import */ var node_child_process__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(7718);
+/* harmony import */ var node_child_process__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(node_child_process__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var node_util__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(7261);
+/* harmony import */ var node_util__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(node_util__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(5942);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _errHandle_js__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(3281);
+/* harmony import */ var _lint_js__WEBPACK_IMPORTED_MODULE_4__ = __nccwpck_require__(8026);
 
 
 
+
+
+const execPromise = (0,node_util__WEBPACK_IMPORTED_MODULE_1__.promisify)(node_child_process__WEBPACK_IMPORTED_MODULE_0__.exec);
+async function installPackage(packageName) {
+    try {
+        await execPromise(`npm install ${packageName} --omit=dev --legacy-peer-deps`);
+    }
+    catch (err) {
+        (0,_errHandle_js__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z)(err);
+    }
+}
 async function run() {
-    const pullRequestPayload = _actions_github__WEBPACK_IMPORTED_MODULE_0__.context.payload.pull_request;
+    await installPackage('@commitlint/config-conventional');
+    const pullRequestPayload = _actions_github__WEBPACK_IMPORTED_MODULE_2__.context.payload.pull_request;
     if (!pullRequestPayload?.title)
         throw new Error('Pull Request or Title not found!');
     const pullRequestObject = {
@@ -35752,10 +35768,10 @@ async function run() {
         number: pullRequestPayload.number,
     };
     try {
-        await (0,_lint_js__WEBPACK_IMPORTED_MODULE_2__/* .verifyTitle */ .j)(pullRequestObject.title);
+        await (0,_lint_js__WEBPACK_IMPORTED_MODULE_4__/* .verifyTitle */ .j)(pullRequestObject.title);
     }
     catch (err) {
-        (0,_errHandle_js__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z)(err);
+        (0,_errHandle_js__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z)(err);
     }
 }
 await run();
@@ -35765,7 +35781,7 @@ __webpack_async_result__();
 
 /***/ }),
 
-/***/ 3011:
+/***/ 8026:
 /***/ ((__unused_webpack_module, __webpack_exports__, __nccwpck_require__) => {
 
 
@@ -36477,8 +36493,8 @@ const subjectExclamationMark = (parsed, when = 'always') => {
 const external_node_buffer_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:buffer");
 ;// CONCATENATED MODULE: external "node:path"
 const external_node_path_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:path");
-;// CONCATENATED MODULE: external "node:child_process"
-const external_node_child_process_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:child_process");
+// EXTERNAL MODULE: external "node:child_process"
+var external_node_child_process_ = __nccwpck_require__(7718);
 ;// CONCATENATED MODULE: external "node:process"
 const external_node_process_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:process");
 // EXTERNAL MODULE: ./node_modules/.pnpm/cross-spawn@7.0.3/node_modules/cross-spawn/index.js
@@ -37682,7 +37698,7 @@ function isTransformStream(stream) {
 
 
 
-const isExecaChildProcess = target => target instanceof external_node_child_process_namespaceObject.ChildProcess && typeof target.then === 'function';
+const isExecaChildProcess = target => target instanceof external_node_child_process_.ChildProcess && typeof target.then === 'function';
 
 const pipeToTarget = (spawned, streamName, target) => {
 	if (typeof target === 'string') {
@@ -38260,7 +38276,7 @@ const parseExpression = expression => {
 	if (
 		typeOfExpression === 'object'
 		&& expression !== null
-		&& !(expression instanceof external_node_child_process_namespaceObject.ChildProcess)
+		&& !(expression instanceof external_node_child_process_.ChildProcess)
 		&& 'stdout' in expression
 	) {
 		const typeOfStdout = typeof expression.stdout;
@@ -38433,10 +38449,10 @@ function execa(file, args, options) {
 
 	let spawned;
 	try {
-		spawned = external_node_child_process_namespaceObject.spawn(parsed.file, parsed.args, parsed.options);
+		spawned = external_node_child_process_.spawn(parsed.file, parsed.args, parsed.options);
 	} catch (error) {
 		// Ensure the returned error is always both a promise and a child process
-		const dummySpawned = new external_node_child_process_namespaceObject.ChildProcess();
+		const dummySpawned = new external_node_child_process_.ChildProcess();
 		const errorPromise = Promise.reject(makeError({
 			error,
 			stdout: '',
@@ -38526,7 +38542,7 @@ function execaSync(file, args, options) {
 
 	let result;
 	try {
-		result = external_node_child_process_namespaceObject.spawnSync(parsed.file, parsed.args, {...parsed.options, input});
+		result = external_node_child_process_.spawnSync(parsed.file, parsed.args, {...parsed.options, input});
 	} catch (error) {
 		throw makeError({
 			error,
@@ -39143,6 +39159,13 @@ module.exports = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("https");
 /***/ ((module) => {
 
 module.exports = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("net");
+
+/***/ }),
+
+/***/ 7718:
+/***/ ((module) => {
+
+module.exports = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:child_process");
 
 /***/ }),
 
