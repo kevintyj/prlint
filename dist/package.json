@@ -1,6 +1,7 @@
 {
   "type": "module",
   "dependencies": {
+    "@commitlint/config-conventional": "^19.2.2",
     "@commitlint/load": "^19.2.0"
   }
 }
