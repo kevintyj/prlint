@@ -1,0 +1,4 @@
+{
+	"src/*": "eslint --fix",
+	"__tests__/*": "eslint --fix"
+}

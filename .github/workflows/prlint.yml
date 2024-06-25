@@ -11,25 +11,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: 📦Setup PNPM
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-      - name: 🌳Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
-
-      - name: 🛠️Install dependencies from lockfile
-        run: pnpm install --frozen-lockfile
-
-      - name: 🧾Print versions
-        run: |
-          git --version
-          node --version
-          pnpm --version
-          pnpm commitlint --version
 
       - name: 📝Validate PR title with commitlint
         uses: ./
