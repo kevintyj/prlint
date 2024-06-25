@@ -28,7 +28,7 @@
     "prebuild": "pnpm run clean:build && pnpm run json:ts:pre",
     "build:ncc": "ncc build src/index.ts -o dist --target es2022 -s -e '@commitlint/load' -e '@commitlint/config-conventional'",
     "build": "pnpm run test:coverage && pnpm run prebuild && pnpm run build:ncc && pnpm run postbuild",
-    "postbuild": "pnpm run json:ts:post && rimraf 'tsconfig.build-temp.json' && rimraf node_modules && npm i --omit=dev --legacy-peer-deps @commitlint/load@^19.2.0",
+    "postbuild": "pnpm run json:ts:post && rimraf 'tsconfig.build-temp.json' && cd dist && npm i --omit=dev --legacy-peer-deps @commitlint/load@^19.2.0",
     "json:ts:post": "json -I -f tsconfig.build.json -e 'this.extends = \"./tsconfig.json\"' && npx ncp 'tsconfig.build-temp.json' 'tsconfig.json'",
     "test": "vitest",
     "test:coverage": "vitest run --coverage.enabled --coverage.reporter='json' ",
