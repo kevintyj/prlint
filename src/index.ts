@@ -22,9 +22,6 @@ async function run(): Promise<void> {
 	if (!pullRequestPayload?.title)
 		throw new Error('Pull Request or Title not found!');
 
-	// eslint-disable-next-line no-console
-	console.log(`Github Payload Context: ${JSON.stringify(pullRequestPayload)}`);
-
 	const pullRequestObject: pullRequest = {
 		title: pullRequestPayload.title as string,
 		number: pullRequestPayload.number,

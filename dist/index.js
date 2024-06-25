@@ -35750,8 +35750,6 @@ async function run() {
     const pullRequestPayload = _actions_github__WEBPACK_IMPORTED_MODULE_0__.context.payload.pull_request;
     if (!pullRequestPayload?.title)
         throw new Error('Pull Request or Title not found!');
-    // eslint-disable-next-line no-console
-    console.log(`Github Payload Context: ${JSON.stringify(pullRequestPayload)}`);
     const pullRequestObject = {
         title: pullRequestPayload.title,
         number: pullRequestPayload.number,
@@ -39039,14 +39037,12 @@ const testLintOptions = {
  */
 async function verifyTitle(title) {
     const commitlintConfig = await (0,load_namespaceObject["default"])({});
-    // eslint-disable-next-line no-console
-    console.log(`Loaded config: \n${JSON.stringify(commitlintConfig.rules)}`);
     const linterResult = await lint(title, commitlintConfig.rules, getLintOptions(commitlintConfig));
-    // eslint-disable-next-line no-console
-    console.log(`Linter result: \n${JSON.stringify(linterResult)}`);
     if (linterResult.valid) {
         (0,core.setOutput)('lint-status', '✅ Commitlint tests passed!\n');
         (0,core.setOutput)('lint-details', linterResult);
+        // eslint-disable-next-line no-console
+        console.log(`✅ Commitlint tests passed!\nLinter Result:\n${JSON.stringify(linterResult)}`);
         return true;
     }
     else {
