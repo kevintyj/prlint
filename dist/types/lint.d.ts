@@ -6,11 +6,15 @@ import type { downloadOptions } from './index.js';
  * @return {LintOptions} LintOptions object with possible falsy default values
  */
 declare function getLintOptions(configuration: QualifiedConfig): LintOptions;
-export declare const testLintOptions: {
-    getLintOptions: typeof getLintOptions;
-};
 type configurationProps = {
     downloadOptions: downloadOptions;
+};
+declare function loadCommitLintConfig(downloadConfig: downloadOptions): Promise<QualifiedConfig | undefined>;
+declare function extractPackageNameFromError(errorMessage: string): string | null;
+export declare const testLintOptions: {
+    getLintOptions: typeof getLintOptions;
+    extractPackageNameFromError: typeof extractPackageNameFromError;
+    loadCommitLintConfig: typeof loadCommitLintConfig;
 };
 /**
  * Utilizes the {@link lint} function to verify the title with options fetched using {@link getLintOptions}

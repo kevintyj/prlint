@@ -10,15 +10,6 @@ import type { downloadOptions } from './index.js';
 
 const execPromise = promisify(exec);
 
-async function installPackage(packageName: string): Promise<void> {
-	try {
-		await execPromise(`npm install ${packageName} --omit=dev --legacy-peer-deps`);
-	}
-	catch (err) {
-		handleError(err);
-	}
-}
-
 /**
  * Conditionally sets values from configuration as a LintOptions object
  * @param {QualifiedConfig} configuration - Commitlint configuration file from load
@@ -36,10 +27,6 @@ function getLintOptions(configuration: QualifiedConfig): LintOptions {
 	};
 }
 
-export const testLintOptions = {
-	getLintOptions,
-};
-
 type configurationProps = {
 	downloadOptions: downloadOptions
 };
@@ -49,18 +36,17 @@ async function loadCommitLintConfig(downloadConfig: downloadOptions) {
 		return await load({});
 	}
 	catch (err) {
-		// eslint-disable-next-line no-console
-		console.log('trying to resolve');
 		const missingPackage = extractPackageNameFromError(err instanceof Error ? err.message : '');
 		if (missingPackage != null && downloadConfig !== 'ignore') {
-			// eslint-disable-next-line no-console
-			console.log(`trying to install ${missingPackage}`);
-			await installPackage(missingPackage).catch(handleError);
+			try {
+				await execPromise(`npm install ${missingPackage} --omit=dev --legacy-peer-deps`);
+			}
+			catch (err) {
+				handleError(err);
+			}
 			return loadCommitLintConfig(downloadConfig);
 		}
 		else {
-			// eslint-disable-next-line no-console
-			console.log('giveup');
 			handleError(err);
 		}
 	}
@@ -70,6 +56,12 @@ function extractPackageNameFromError(errorMessage: string) {
 	const match = errorMessage.match(/Cannot find module ['"]([^'"]+)['"]/);
 	return match ? match[1] : null;
 }
+
+export const testLintOptions = {
+	getLintOptions,
+	extractPackageNameFromError,
+	loadCommitLintConfig,
+};
 
 /**
  * Utilizes the {@link lint} function to verify the title with options fetched using {@link getLintOptions}

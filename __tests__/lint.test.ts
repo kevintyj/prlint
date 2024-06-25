@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import load from '@commitlint/load';
 import { testLintOptions, verifyTitle } from '../src/lint';
 
-const { getLintOptions } = testLintOptions;
+const { getLintOptions, extractPackageNameFromError, loadCommitLintConfig } = testLintOptions;
 
 /* eslint-disable regexp/no-super-linear-backtracking */
 const emptyConfigOption = {
@@ -40,6 +40,20 @@ const emptyConfigOptionNoParserOpts = {
 	parserOpts: undefined,
 	plugins: {},
 };
+
+describe('handler', async () => {
+	it('misc errors should return empty', () => {
+		expect(extractPackageNameFromError('Error: You forgot a semicolon')).toBeNull;
+	});
+
+	it('valid errors should return package', () => {
+		expect(extractPackageNameFromError('Cannot find module "semicolon"')).toBe('semicolon');
+	});
+
+	it('test valid config', () => {
+		expect(loadCommitLintConfig()).resolves.not.toThrow;
+	});
+});
 
 describe('commitlint', async () => {
 	const emptyConfig = await load({});

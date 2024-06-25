@@ -39018,14 +39018,6 @@ var errHandle = __nccwpck_require__(3281);
 
 
 const execPromise = (0,external_node_util_.promisify)(external_node_child_process_namespaceObject.exec);
-async function installPackage(packageName) {
-    try {
-        await execPromise(`npm install ${packageName} --omit=dev --legacy-peer-deps`);
-    }
-    catch (err) {
-        (0,errHandle/* default */.Z)(err);
-    }
-}
 /**
  * Conditionally sets values from configuration as a LintOptions object
  * @param {QualifiedConfig} configuration - Commitlint configuration file from load
@@ -39042,26 +39034,22 @@ function getLintOptions(configuration) {
         helpUrl: configuration.helpUrl ? configuration.helpUrl : undefined,
     };
 }
-const testLintOptions = {
-    getLintOptions,
-};
 async function loadCommitLintConfig(downloadConfig) {
     try {
         return await (0,load_namespaceObject["default"])({});
     }
     catch (err) {
-        // eslint-disable-next-line no-console
-        console.log('trying to resolve');
         const missingPackage = extractPackageNameFromError(err instanceof Error ? err.message : '');
         if (missingPackage != null && downloadConfig !== 'ignore') {
-            // eslint-disable-next-line no-console
-            console.log(`trying to install ${missingPackage}`);
-            await installPackage(missingPackage).catch(errHandle/* default */.Z);
+            try {
+                await execPromise(`npm install ${missingPackage} --omit=dev --legacy-peer-deps`);
+            }
+            catch (err) {
+                (0,errHandle/* default */.Z)(err);
+            }
             return loadCommitLintConfig(downloadConfig);
         }
         else {
-            // eslint-disable-next-line no-console
-            console.log('giveup');
             (0,errHandle/* default */.Z)(err);
         }
     }
@@ -39070,6 +39058,11 @@ function extractPackageNameFromError(errorMessage) {
     const match = errorMessage.match(/Cannot find module ['"]([^'"]+)['"]/);
     return match ? match[1] : null;
 }
+const testLintOptions = {
+    getLintOptions,
+    extractPackageNameFromError,
+    loadCommitLintConfig,
+};
 /**
  * Utilizes the {@link lint} function to verify the title with options fetched using {@link getLintOptions}
  * @param {string} title - The commit/PR title to check for lint
