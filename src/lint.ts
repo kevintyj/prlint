@@ -33,7 +33,13 @@ export const testLintOptions = {
 export async function verifyTitle(title: string): Promise<boolean> {
 	const commitlintConfig: QualifiedConfig = await load({});
 
+	// eslint-disable-next-line no-console
+	console.log(`Loaded config: \n${JSON.stringify(commitlintConfig.rules)}`);
+
 	const linterResult = await lint(title, commitlintConfig.rules, getLintOptions(commitlintConfig));
+
+	// eslint-disable-next-line no-console
+	console.log(`Linter result: \n${JSON.stringify(linterResult)}`);
 
 	if (linterResult.valid) {
 		setOutput('lint-status', '✅ Commitlint tests passed!\n');
