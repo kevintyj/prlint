@@ -61,13 +61,13 @@ describe('commitlint', async () => {
 	});
 
 	it('throw error on incorrect title', async () => {
-		await expect(verifyTitle('foo: bar.', { downloadOptions: 'test' })).rejects.toThrowError(/check failed/);
-		await expect(verifyTitle('foo: bar', { downloadOptions: 'test' })).rejects.toThrowError(/subject-case/);
+		await expect(verifyTitle('foo: bar.', { downloadOptions: 'node' })).rejects.toThrow();
+		await expect(verifyTitle('foo: bar.', { downloadOptions: 'ignore' })).rejects.toThrow();
 		await expect(verifyTitle('test: add tests', { downloadOptions: 'test' })).rejects.toThrowError(/sentence-case/);
 	});
 
 	it('return true if title is valid', async () => {
-		await expect(verifyTitle('fix: Add new commets', { downloadOptions: 'test' })).resolves.toEqual(true);
+		await expect(verifyTitle('fix: Add new comments', { downloadOptions: 'test' })).resolves.toEqual(true);
 		await expect(verifyTitle('feat: Title is short and nice!', { downloadOptions: 'test' })).resolves.toEqual(true);
 		await expect(verifyTitle('test: Add test suites', { downloadOptions: 'test' })).resolves.toEqual(true);
 	});

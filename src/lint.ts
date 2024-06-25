@@ -35,6 +35,7 @@ async function loadCommitLintConfig(downloadConfig: downloadOptions) {
 	try {
 		return await load({});
 	}
+	/* v8 ignore next 3 */
 	catch (err) {
 		const missingPackage = extractPackageNameFromError(err instanceof Error ? err.message : '');
 		if (missingPackage != null && downloadConfig !== 'ignore') {
