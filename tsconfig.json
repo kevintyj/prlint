@@ -1,17 +1,18 @@
 {
   "compilerOptions": {
     /* Build */
-    "target": "es2015",
-    "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "module": "commonjs",
+    "target": "es2022",
+    "lib": ["ESNext"],
+    "module": "NodeNext",
     "declaration": true,
     "declarationDir": "lib/types",
     "outDir": "lib",
     "rootDir": "src",
     "esModuleInterop": true,
+    "sourceMap": true,
 
     /* Bundler mode */
-    "moduleResolution": "node",
+    "moduleResolution": "NodeNext",
     "resolveJsonModule": true,
     "isolatedModules": true,
 

@@ -3,8 +3,9 @@ import { describe, expect, it } from 'vitest';
 import load from '@commitlint/load';
 import { testLintOptions, verifyTitle } from '../src/lint';
 
-const { getLintOptions, convertESMtoCJS } = testLintOptions;
+const { getLintOptions } = testLintOptions;
 
+/* eslint-disable regexp/no-super-linear-backtracking */
 const emptyConfigOption = {
 	defaultIgnores: true,
 	helpUrl: 'https://github.com/conventional-changelog/commitlint/#what-is-commitlint',
@@ -30,6 +31,7 @@ const emptyConfigOption = {
 	},
 	plugins: {},
 };
+/* eslint-enable regexp/no-super-linear-backtracking */
 
 const emptyConfigOptionNoParserOpts = {
 	defaultIgnores: true,
@@ -68,9 +70,5 @@ describe('commitlint', async () => {
 		await expect(verifyTitle('fix: Add new commets')).resolves.toEqual(true);
 		await expect(verifyTitle('feat: Title is short and nice!', 'something.config.js')).resolves.toEqual(true);
 		await expect(verifyTitle('test: Add test suites', 'commitlint.config.js')).resolves.toEqual(true);
-	});
-
-	it('return error if file for esm conversion does not exist', async () => {
-		await expect(convertESMtoCJS('dne.js', 'dne.cjs')).rejects.toThrowError(/no such file or directory/);
 	});
 });
