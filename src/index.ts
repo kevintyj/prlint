@@ -8,7 +8,7 @@ type pullRequest = {
 	number: number
 };
 
-export type downloadOptions = 'ignore' | 'node';
+export type downloadOptions = 'ignore' | 'node' | 'test';
 
 async function run(): Promise<void> {
 	const downloadDependencies: downloadOptions = core.getInput('download-dependencies') as downloadOptions ?? 'ignore';

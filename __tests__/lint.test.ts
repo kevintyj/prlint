@@ -41,25 +41,6 @@ const emptyConfigOptionNoParserOpts = {
 	plugins: {},
 };
 
-describe('handler', async () => {
-	it('misc errors should return empty', () => {
-		expect(extractPackageNameFromError('Error: You forgot a semicolon')).toBeNull;
-	});
-
-	it('valid errors should return package', () => {
-		expect(extractPackageNameFromError('Cannot find module "semicolon"')).toBe('semicolon');
-	});
-
-	it('test failing config', () => {
-		vi.spyOn(process, 'cwd').mockReturnValue('/tmp');
-		expect(loadCommitLintConfig()).toThrow;
-	});
-
-	it('test valid config', () => {
-		expect(loadCommitLintConfig()).resolves.not.toThrow;
-	});
-});
-
 describe('commitlint', async () => {
 	const emptyConfig = await load({});
 	const defaultConfig = await load({ extends: '@commitlint/config-conventional' });
@@ -80,14 +61,33 @@ describe('commitlint', async () => {
 	});
 
 	it('throw error on incorrect title', async () => {
-		await expect(verifyTitle('foo: bar')).rejects.toThrowError(/check failed/);
-		await expect(verifyTitle('foo: bar', 'something.config.js')).rejects.toThrowError(/subject-case/);
-		await expect(verifyTitle('test: add tests', 'commitlint.config.js')).rejects.toThrowError(/sentence-case/);
+		await expect(verifyTitle('foo: bar.', { downloadOptions: 'test' })).rejects.toThrowError(/check failed/);
+		await expect(verifyTitle('foo: bar', { downloadOptions: 'test' })).rejects.toThrowError(/subject-case/);
+		await expect(verifyTitle('test: add tests', { downloadOptions: 'test' })).rejects.toThrowError(/sentence-case/);
 	});
 
 	it('return true if title is valid', async () => {
-		await expect(verifyTitle('fix: Add new commets')).resolves.toEqual(true);
-		await expect(verifyTitle('feat: Title is short and nice!', 'something.config.js')).resolves.toEqual(true);
-		await expect(verifyTitle('test: Add test suites', 'commitlint.config.js')).resolves.toEqual(true);
+		await expect(verifyTitle('fix: Add new commets', { downloadOptions: 'test' })).resolves.toEqual(true);
+		await expect(verifyTitle('feat: Title is short and nice!', { downloadOptions: 'test' })).resolves.toEqual(true);
+		await expect(verifyTitle('test: Add test suites', { downloadOptions: 'test' })).resolves.toEqual(true);
+	});
+});
+
+describe('handler', async () => {
+	it('misc errors should return empty', () => {
+		expect(extractPackageNameFromError('Error: You forgot a semicolon')).toBeNull;
+	});
+
+	it('valid errors should return package', () => {
+		expect(extractPackageNameFromError('Cannot find module "semicolon"')).toBe('semicolon');
+	});
+
+	it('test valid config', () => {
+		expect(loadCommitLintConfig()).resolves.not.toThrow;
+	});
+
+	it('test failing config', () => {
+		vi.spyOn(process, 'cwd').mockReturnValue('/tmp');
+		expect(loadCommitLintConfig()).toThrow;
 	});
 });

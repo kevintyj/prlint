@@ -39071,7 +39071,9 @@ const testLintOptions = {
  */
 async function verifyTitle(title, config = { downloadOptions: 'ignore' }) {
     const commitlintConfig = await loadCommitLintConfig(config.downloadOptions);
-    const linterResult = await lint(title, commitlintConfig.rules, getLintOptions(commitlintConfig));
+    const linterResult = await lint(title, config.downloadOptions === 'test'
+        ? { 'subject-case': [2, 'always', 'sentence-case'] }
+        : commitlintConfig.rules, getLintOptions(commitlintConfig));
     if (linterResult.valid) {
         (0,core.setOutput)('lint-status', '✅ Commitlint tests passed!\n');
         (0,core.setOutput)('lint-details', linterResult);

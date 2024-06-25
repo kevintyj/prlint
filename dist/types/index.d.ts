@@ -1,1 +1,1 @@
-export type downloadOptions = 'ignore' | 'node';
+export type downloadOptions = 'ignore' | 'node' | 'test';
