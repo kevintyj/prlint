@@ -35736,37 +35736,15 @@ function handleError(err, fail = true) {
 /***/ ((module, __unused_webpack___webpack_exports__, __nccwpck_require__) => {
 
 __nccwpck_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
-/* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(9411);
-/* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(node_path__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var node_module__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(2033);
-/* harmony import */ var node_module__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(node_module__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(5942);
-/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _errHandle_js__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(3281);
-/* harmony import */ var _lint_js__WEBPACK_IMPORTED_MODULE_4__ = __nccwpck_require__(4868);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(5942);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _errHandle_js__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(3281);
+/* harmony import */ var _lint_js__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(3011);
 
 
 
-
-
-/* eslint-disable ts/no-unsafe-return */
-const originalRequire = node_module__WEBPACK_IMPORTED_MODULE_1__.Module.prototype.require;
-// @ts-expect-error Module from node
-node_module__WEBPACK_IMPORTED_MODULE_1__.Module.prototype.require = function (request) {
-    if (!(0,node_path__WEBPACK_IMPORTED_MODULE_0__.isAbsolute)(request) && !request.startsWith('.')) {
-        const distNodeModulesPath = (0,node_path__WEBPACK_IMPORTED_MODULE_0__.resolve)(__dirname, 'node_modules', request);
-        try {
-            return originalRequire.call(this, distNodeModulesPath);
-        }
-        catch (err) {
-            // If it fails, fallback to the original behavior
-        }
-    }
-    return originalRequire.call(this, request);
-};
-/* eslint-enable ts/no-unsafe-return */
 async function run() {
-    const pullRequestPayload = _actions_github__WEBPACK_IMPORTED_MODULE_2__.context.payload.pull_request;
+    const pullRequestPayload = _actions_github__WEBPACK_IMPORTED_MODULE_0__.context.payload.pull_request;
     if (!pullRequestPayload?.title)
         throw new Error('Pull Request or Title not found!');
     const pullRequestObject = {
@@ -35774,10 +35752,10 @@ async function run() {
         number: pullRequestPayload.number,
     };
     try {
-        await (0,_lint_js__WEBPACK_IMPORTED_MODULE_4__/* .verifyTitle */ .j)(pullRequestObject.title);
+        await (0,_lint_js__WEBPACK_IMPORTED_MODULE_2__/* .verifyTitle */ .j)(pullRequestObject.title);
     }
     catch (err) {
-        (0,_errHandle_js__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z)(err);
+        (0,_errHandle_js__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z)(err);
     }
 }
 await run();
@@ -35787,7 +35765,7 @@ __webpack_async_result__();
 
 /***/ }),
 
-/***/ 4868:
+/***/ 3011:
 /***/ ((__unused_webpack_module, __webpack_exports__, __nccwpck_require__) => {
 
 
@@ -36497,8 +36475,8 @@ const subjectExclamationMark = (parsed, when = 'always') => {
 //# sourceMappingURL=subject-exclamation-mark.js.map
 ;// CONCATENATED MODULE: external "node:buffer"
 const external_node_buffer_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:buffer");
-// EXTERNAL MODULE: external "node:path"
-var external_node_path_ = __nccwpck_require__(9411);
+;// CONCATENATED MODULE: external "node:path"
+const external_node_path_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:path");
 ;// CONCATENATED MODULE: external "node:child_process"
 const external_node_child_process_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:child_process");
 ;// CONCATENATED MODULE: external "node:process"
@@ -36551,7 +36529,7 @@ const npmRunPath = ({
 	addExecPath = true,
 } = {}) => {
 	const cwdString = cwd instanceof URL ? (0,external_node_url_namespaceObject.fileURLToPath)(cwd) : cwd;
-	const cwdPath = external_node_path_.resolve(cwdString);
+	const cwdPath = external_node_path_namespaceObject.resolve(cwdString);
 	const result = [];
 
 	if (preferLocal) {
@@ -36562,23 +36540,23 @@ const npmRunPath = ({
 		applyExecPath(result, execPath, cwdPath);
 	}
 
-	return [...result, pathOption].join(external_node_path_.delimiter);
+	return [...result, pathOption].join(external_node_path_namespaceObject.delimiter);
 };
 
 const applyPreferLocal = (result, cwdPath) => {
 	let previous;
 
 	while (previous !== cwdPath) {
-		result.push(external_node_path_.join(cwdPath, 'node_modules/.bin'));
+		result.push(external_node_path_namespaceObject.join(cwdPath, 'node_modules/.bin'));
 		previous = cwdPath;
-		cwdPath = external_node_path_.resolve(cwdPath, '..');
+		cwdPath = external_node_path_namespaceObject.resolve(cwdPath, '..');
 	}
 };
 
 // Ensure the running `node` binary is used
 const applyExecPath = (result, execPath, cwdPath) => {
 	const execPathString = execPath instanceof URL ? (0,external_node_url_namespaceObject.fileURLToPath)(execPath) : execPath;
-	result.push(external_node_path_.resolve(cwdPath, execPathString, '..'));
+	result.push(external_node_path_namespaceObject.resolve(cwdPath, execPathString, '..'));
 };
 
 const npmRunPathEnv = ({env = external_node_process_namespaceObject.env, ...options} = {}) => {
@@ -38424,7 +38402,7 @@ const handleArguments = (file, args, options = {}) => {
 
 	options.stdio = normalizeStdio(options);
 
-	if (external_node_process_namespaceObject.platform === 'win32' && external_node_path_.basename(file, '.exe') === 'cmd') {
+	if (external_node_process_namespaceObject.platform === 'win32' && external_node_path_namespaceObject.basename(file, '.exe') === 'cmd') {
 		// #116
 		args.unshift('/q');
 	}
@@ -39172,20 +39150,6 @@ module.exports = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("net");
 /***/ ((module) => {
 
 module.exports = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:events");
-
-/***/ }),
-
-/***/ 2033:
-/***/ ((module) => {
-
-module.exports = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:module");
-
-/***/ }),
-
-/***/ 9411:
-/***/ ((module) => {
-
-module.exports = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:path");
 
 /***/ }),
 
