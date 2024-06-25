@@ -3,7 +3,7 @@
 lib
 
 # dependencies
-node_modules/
+#node_modules/
 !dist/**/node_modules
 
 # IDEs and editors
