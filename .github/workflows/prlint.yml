@@ -14,3 +14,5 @@ jobs:
 
       - name: 📝Validate PR title with commitlint
         uses: ./
+        with:
+          download-dependencies: node

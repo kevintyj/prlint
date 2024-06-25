@@ -1,5 +1,5 @@
-import './sourcemap-register.cjs';import * as __WEBPACK_EXTERNAL_MODULE__commitlint_load_47e0ba67__ from "@commitlint/load";
-import { createRequire as __WEBPACK_EXTERNAL_createRequire } from "module";
+import './sourcemap-register.cjs';import { createRequire as __WEBPACK_EXTERNAL_createRequire } from "module";
+import * as __WEBPACK_EXTERNAL_MODULE__commitlint_load_47e0ba67__ from "@commitlint/load";
 /******/ var __webpack_modules__ = ({
 
 /***/ 1513:
@@ -28,7 +28,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.issue = exports.issueCommand = void 0;
 const os = __importStar(__nccwpck_require__(2037));
-const utils_1 = __nccwpck_require__(197);
+const utils_1 = __nccwpck_require__(1120);
 /**
  * Commands
  *
@@ -136,7 +136,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getIDToken = exports.getState = exports.saveState = exports.group = exports.endGroup = exports.startGroup = exports.info = exports.notice = exports.warning = exports.error = exports.debug = exports.isDebug = exports.setFailed = exports.setCommandEcho = exports.setOutput = exports.getBooleanInput = exports.getMultilineInput = exports.getInput = exports.addPath = exports.setSecret = exports.exportVariable = exports.ExitCode = void 0;
 const command_1 = __nccwpck_require__(1513);
 const file_command_1 = __nccwpck_require__(9017);
-const utils_1 = __nccwpck_require__(197);
+const utils_1 = __nccwpck_require__(1120);
 const os = __importStar(__nccwpck_require__(2037));
 const path = __importStar(__nccwpck_require__(1017));
 const oidc_utils_1 = __nccwpck_require__(9141);
@@ -473,7 +473,7 @@ exports.prepareKeyValueMessage = exports.issueFileCommand = void 0;
 const fs = __importStar(__nccwpck_require__(7147));
 const os = __importStar(__nccwpck_require__(2037));
 const uuid_1 = __nccwpck_require__(7338);
-const utils_1 = __nccwpck_require__(197);
+const utils_1 = __nccwpck_require__(1120);
 function issueFileCommand(command, message) {
     const filePath = process.env[`GITHUB_${command}`];
     if (!filePath) {
@@ -942,7 +942,7 @@ exports.summary = _summary;
 
 /***/ }),
 
-/***/ 197:
+/***/ 1120:
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -1206,7 +1206,7 @@ const Utils = __importStar(__nccwpck_require__(1181));
 // octokit + plugins
 const core_1 = __nccwpck_require__(9437);
 const plugin_rest_endpoint_methods_1 = __nccwpck_require__(3418);
-const plugin_paginate_rest_1 = __nccwpck_require__(1120);
+const plugin_paginate_rest_1 = __nccwpck_require__(8927);
 exports.context = new Context.Context();
 const baseUrl = Utils.getApiBaseUrl();
 exports.defaults = {
@@ -2862,7 +2862,7 @@ function withCustomRequest(customRequest) {
 
 /***/ }),
 
-/***/ 1120:
+/***/ 8927:
 /***/ ((module) => {
 
 
@@ -35736,31 +35736,19 @@ function handleError(err, fail = true) {
 /***/ ((module, __unused_webpack___webpack_exports__, __nccwpck_require__) => {
 
 __nccwpck_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
-/* harmony import */ var node_child_process__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(7718);
-/* harmony import */ var node_child_process__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(node_child_process__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var node_util__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(7261);
-/* harmony import */ var node_util__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(node_util__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(5942);
-/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _errHandle_js__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(3281);
-/* harmony import */ var _lint_js__WEBPACK_IMPORTED_MODULE_4__ = __nccwpck_require__(8026);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(9093);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(5942);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _errHandle_js__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(3281);
+/* harmony import */ var _lint_js__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(3011);
 
 
 
 
-
-const execPromise = (0,node_util__WEBPACK_IMPORTED_MODULE_1__.promisify)(node_child_process__WEBPACK_IMPORTED_MODULE_0__.exec);
-async function installPackage(packageName) {
-    try {
-        await execPromise(`npm install ${packageName} --omit=dev --legacy-peer-deps`);
-    }
-    catch (err) {
-        (0,_errHandle_js__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z)(err);
-    }
-}
 async function run() {
-    await installPackage('@commitlint/config-conventional');
-    const pullRequestPayload = _actions_github__WEBPACK_IMPORTED_MODULE_2__.context.payload.pull_request;
+    const downloadDependencies = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('download-dependencies') ?? 'ignore';
+    const pullRequestPayload = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.payload.pull_request;
     if (!pullRequestPayload?.title)
         throw new Error('Pull Request or Title not found!');
     const pullRequestObject = {
@@ -35768,10 +35756,10 @@ async function run() {
         number: pullRequestPayload.number,
     };
     try {
-        await (0,_lint_js__WEBPACK_IMPORTED_MODULE_4__/* .verifyTitle */ .j)(pullRequestObject.title);
+        await (0,_lint_js__WEBPACK_IMPORTED_MODULE_3__/* .verifyTitle */ .j)(pullRequestObject.title, { downloadOptions: downloadDependencies });
     }
     catch (err) {
-        (0,_errHandle_js__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z)(err);
+        (0,_errHandle_js__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Z)(err);
     }
 }
 await run();
@@ -35781,7 +35769,7 @@ __webpack_async_result__();
 
 /***/ }),
 
-/***/ 8026:
+/***/ 3011:
 /***/ ((__unused_webpack_module, __webpack_exports__, __nccwpck_require__) => {
 
 
@@ -35792,6 +35780,10 @@ __nccwpck_require__.d(__webpack_exports__, {
 
 // UNUSED EXPORTS: testLintOptions
 
+// EXTERNAL MODULE: external "node:util"
+var external_node_util_ = __nccwpck_require__(7261);
+;// CONCATENATED MODULE: external "node:child_process"
+const external_node_child_process_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:child_process");
 ;// CONCATENATED MODULE: external "@commitlint/load"
 var x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
 var y = x => () => x
@@ -36493,8 +36485,6 @@ const subjectExclamationMark = (parsed, when = 'always') => {
 const external_node_buffer_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:buffer");
 ;// CONCATENATED MODULE: external "node:path"
 const external_node_path_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:path");
-// EXTERNAL MODULE: external "node:child_process"
-var external_node_child_process_ = __nccwpck_require__(7718);
 ;// CONCATENATED MODULE: external "node:process"
 const external_node_process_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:process");
 // EXTERNAL MODULE: ./node_modules/.pnpm/cross-spawn@7.0.3/node_modules/cross-spawn/index.js
@@ -37698,7 +37688,7 @@ function isTransformStream(stream) {
 
 
 
-const isExecaChildProcess = target => target instanceof external_node_child_process_.ChildProcess && typeof target.then === 'function';
+const isExecaChildProcess = target => target instanceof external_node_child_process_namespaceObject.ChildProcess && typeof target.then === 'function';
 
 const pipeToTarget = (spawned, streamName, target) => {
 	if (typeof target === 'string') {
@@ -38276,7 +38266,7 @@ const parseExpression = expression => {
 	if (
 		typeOfExpression === 'object'
 		&& expression !== null
-		&& !(expression instanceof external_node_child_process_.ChildProcess)
+		&& !(expression instanceof external_node_child_process_namespaceObject.ChildProcess)
 		&& 'stdout' in expression
 	) {
 		const typeOfStdout = typeof expression.stdout;
@@ -38338,8 +38328,6 @@ const parseTemplates = (templates, expressions) => {
 };
 
 
-// EXTERNAL MODULE: external "node:util"
-var external_node_util_ = __nccwpck_require__(7261);
 ;// CONCATENATED MODULE: ./node_modules/.pnpm/execa@8.0.1/node_modules/execa/lib/verbose.js
 
 
@@ -38449,10 +38437,10 @@ function execa(file, args, options) {
 
 	let spawned;
 	try {
-		spawned = external_node_child_process_.spawn(parsed.file, parsed.args, parsed.options);
+		spawned = external_node_child_process_namespaceObject.spawn(parsed.file, parsed.args, parsed.options);
 	} catch (error) {
 		// Ensure the returned error is always both a promise and a child process
-		const dummySpawned = new external_node_child_process_.ChildProcess();
+		const dummySpawned = new external_node_child_process_namespaceObject.ChildProcess();
 		const errorPromise = Promise.reject(makeError({
 			error,
 			stdout: '',
@@ -38542,7 +38530,7 @@ function execaSync(file, args, options) {
 
 	let result;
 	try {
-		result = external_node_child_process_.spawnSync(parsed.file, parsed.args, {...parsed.options, input});
+		result = external_node_child_process_namespaceObject.spawnSync(parsed.file, parsed.args, {...parsed.options, input});
 	} catch (error) {
 		throw makeError({
 			error,
@@ -39019,11 +39007,25 @@ function logWithTile(title, content) {
 }
 /* harmony default export */ const log = (logWithTile);
 
+// EXTERNAL MODULE: ./src/errHandle.ts
+var errHandle = __nccwpck_require__(3281);
 ;// CONCATENATED MODULE: ./src/lint.ts
 
 
 
 
+
+
+
+const execPromise = (0,external_node_util_.promisify)(external_node_child_process_namespaceObject.exec);
+async function installPackage(packageName) {
+    try {
+        await execPromise(`npm install ${packageName} --omit=dev --legacy-peer-deps`);
+    }
+    catch (err) {
+        (0,errHandle/* default */.Z)(err);
+    }
+}
 /**
  * Conditionally sets values from configuration as a LintOptions object
  * @param {QualifiedConfig} configuration - Commitlint configuration file from load
@@ -39043,13 +39045,39 @@ function getLintOptions(configuration) {
 const testLintOptions = {
     getLintOptions,
 };
+async function loadCommitLintConfig(downloadConfig) {
+    try {
+        return await (0,load_namespaceObject["default"])({});
+    }
+    catch (err) {
+        // eslint-disable-next-line no-console
+        console.log('trying to resolve');
+        const missingPackage = extractPackageNameFromError(err instanceof Error ? err.message : '');
+        if (missingPackage != null && downloadConfig !== 'ignore') {
+            // eslint-disable-next-line no-console
+            console.log(`trying to install ${missingPackage}`);
+            await installPackage(missingPackage).catch(errHandle/* default */.Z);
+            return loadCommitLintConfig(downloadConfig);
+        }
+        else {
+            // eslint-disable-next-line no-console
+            console.log('giveup');
+            (0,errHandle/* default */.Z)(err);
+        }
+    }
+}
+function extractPackageNameFromError(errorMessage) {
+    const match = errorMessage.match(/Cannot find module ['"]([^'"]+)['"]/);
+    return match ? match[1] : null;
+}
 /**
  * Utilizes the {@link lint} function to verify the title with options fetched using {@link getLintOptions}
  * @param {string} title - The commit/PR title to check for lint
+ * @param {configurationProps} config - the verifyTitle configuration object
  * @return {Promise<boolean>} - Returns true if linter passes, throws {@link Error} if failing
  */
-async function verifyTitle(title) {
-    const commitlintConfig = await (0,load_namespaceObject["default"])({});
+async function verifyTitle(title, config = { downloadOptions: 'ignore' }) {
+    const commitlintConfig = await loadCommitLintConfig(config.downloadOptions);
     const linterResult = await lint(title, commitlintConfig.rules, getLintOptions(commitlintConfig));
     if (linterResult.valid) {
         (0,core.setOutput)('lint-status', '✅ Commitlint tests passed!\n');
@@ -39159,13 +39187,6 @@ module.exports = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("https");
 /***/ ((module) => {
 
 module.exports = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("net");
-
-/***/ }),
-
-/***/ 7718:
-/***/ ((module) => {
-
-module.exports = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:child_process");
 
 /***/ }),
 

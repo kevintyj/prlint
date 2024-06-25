@@ -1,8 +1,23 @@
+import { promisify } from 'node:util';
+import { exec } from 'node:child_process';
 import type { LintOptions, QualifiedConfig } from '@commitlint/types';
 import load from '@commitlint/load';
 import lint from '@commitlint/lint';
 import { setOutput } from '@actions/core';
 import logWithTile from './log.js';
+import handleError from './errHandle.js';
+import type { downloadOptions } from './index.js';
+
+const execPromise = promisify(exec);
+
+async function installPackage(packageName: string): Promise<void> {
+	try {
+		await execPromise(`npm install ${packageName} --omit=dev --legacy-peer-deps`);
+	}
+	catch (err) {
+		handleError(err);
+	}
+}
 
 /**
  * Conditionally sets values from configuration as a LintOptions object
@@ -25,13 +40,45 @@ export const testLintOptions = {
 	getLintOptions,
 };
 
+type configurationProps = {
+	downloadOptions: downloadOptions
+};
+
+async function loadCommitLintConfig(downloadConfig: downloadOptions) {
+	try {
+		return await load({});
+	}
+	catch (err) {
+		// eslint-disable-next-line no-console
+		console.log('trying to resolve');
+		const missingPackage = extractPackageNameFromError(err instanceof Error ? err.message : '');
+		if (missingPackage != null && downloadConfig !== 'ignore') {
+			// eslint-disable-next-line no-console
+			console.log(`trying to install ${missingPackage}`);
+			await installPackage(missingPackage).catch(handleError);
+			return loadCommitLintConfig(downloadConfig);
+		}
+		else {
+			// eslint-disable-next-line no-console
+			console.log('giveup');
+			handleError(err);
+		}
+	}
+}
+
+function extractPackageNameFromError(errorMessage: string) {
+	const match = errorMessage.match(/Cannot find module ['"]([^'"]+)['"]/);
+	return match ? match[1] : null;
+}
+
 /**
  * Utilizes the {@link lint} function to verify the title with options fetched using {@link getLintOptions}
  * @param {string} title - The commit/PR title to check for lint
+ * @param {configurationProps} config - the verifyTitle configuration object
  * @return {Promise<boolean>} - Returns true if linter passes, throws {@link Error} if failing
  */
-export async function verifyTitle(title: string): Promise<boolean> {
-	const commitlintConfig: QualifiedConfig = await load({});
+export async function verifyTitle(title: string, config: configurationProps = { downloadOptions: 'ignore' }): Promise<boolean> {
+	const commitlintConfig: QualifiedConfig = await loadCommitLintConfig(config.downloadOptions) as QualifiedConfig;
 
 	const linterResult = await lint(title, commitlintConfig.rules, getLintOptions(commitlintConfig));
 

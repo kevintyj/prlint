@@ -1,5 +1,4 @@
-import { exec } from 'node:child_process';
-import { promisify } from 'node:util';
+import * as core from '@actions/core';
 import * as github from '@actions/github';
 import handleError from './errHandle.js';
 import { verifyTitle } from './lint.js';
@@ -9,19 +8,10 @@ type pullRequest = {
 	number: number
 };
 
-const execPromise = promisify(exec);
-
-async function installPackage(packageName: string): Promise<void> {
-	try {
-		await execPromise(`npm install ${packageName} --omit=dev --legacy-peer-deps`);
-	}
-	catch (err) {
-		handleError(err);
-	}
-}
+export type downloadOptions = 'ignore' | 'node';
 
 async function run(): Promise<void> {
-	await installPackage('@commitlint/config-conventional');
+	const downloadDependencies: downloadOptions = core.getInput('download-dependencies') as downloadOptions ?? 'ignore';
 
 	const pullRequestPayload = github.context.payload.pull_request;
 
@@ -34,7 +24,7 @@ async function run(): Promise<void> {
 	};
 
 	try {
-		await verifyTitle(pullRequestObject.title);
+		await verifyTitle(pullRequestObject.title, { downloadOptions: downloadDependencies });
 	}
 	catch (err) {
 		handleError(err);

@@ -4,6 +4,11 @@ description: Ensure PR title match commitlint config
 runs:
   using: node20
   main: dist/index.js
+inputs:
+  download-dependencies:
+    description: 'Download commitlint dependencies'
+    required: false
+    default: 'ignore'
 outputs:
   lint-status:
     description: The status of the PR lint

@@ -1,1 +1,1 @@
-export {};
+export type downloadOptions = 'ignore' | 'node';
