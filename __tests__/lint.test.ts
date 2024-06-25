@@ -1,5 +1,5 @@
 import process from 'node:process';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import load from '@commitlint/load';
 import { testLintOptions, verifyTitle } from '../src/lint';
 
@@ -48,6 +48,11 @@ describe('handler', async () => {
 
 	it('valid errors should return package', () => {
 		expect(extractPackageNameFromError('Cannot find module "semicolon"')).toBe('semicolon');
+	});
+
+	it('test failing config', () => {
+		vi.spyOn(process, 'cwd').mockReturnValue('/tmp');
+		expect(loadCommitLintConfig()).toThrow;
 	});
 
 	it('test valid config', () => {
