@@ -6,7 +6,7 @@ import lint from '@commitlint/lint';
 import { setOutput } from '@actions/core';
 import logWithTile from './log.js';
 import handleError from './errHandle.js';
-import type { downloadOptions } from './index.js';
+import type { DownloadOptions } from './index.js';
 
 const execPromise = promisify(exec);
 
@@ -28,10 +28,10 @@ function getLintOptions(configuration: QualifiedConfig): LintOptions {
 }
 
 type configurationProps = {
-	downloadOptions: downloadOptions
+	downloadOptions: DownloadOptions
 };
 
-async function loadCommitLintConfig(downloadConfig: downloadOptions) {
+async function loadCommitLintConfig(downloadConfig: DownloadOptions) {
 	try {
 		return await load({});
 	}

@@ -9,6 +9,10 @@ inputs:
     description: 'Download commitlint dependencies'
     required: false
     default: 'ignore'
+  body:
+    description: 'Use body text as commit body using Github style'
+    required: false
+    default: 'false'
 outputs:
   lint-status:
     description: The status of the PR lint
