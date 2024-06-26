@@ -26,9 +26,9 @@
     "watch": "tsup --watch",
     "json:ts:pre": "npx ncp 'tsconfig.json' 'tsconfig.build-temp.json' && json -I -f tsconfig.build.json -e 'this.extends = \"./tsconfig.build-temp.json\"' && npx ncp 'tsconfig.build.json' 'tsconfig.json'",
     "prebuild": "pnpm run clean:build && pnpm run json:ts:pre",
-    "build:ncc": "ncc build src/index.ts -o dist --target es2022 -s -e '@commitlint/load'",
+    "build:ncc": "ncc build src/index.ts -o dist --target es2022 -s -e '@commitlint/load' -e '@commitlint/config-conventional'",
     "build": "pnpm run test:coverage && pnpm run prebuild && pnpm run build:ncc && pnpm run postbuild",
-    "postbuild": "pnpm run json:ts:post && rimraf 'tsconfig.build-temp.json'",
+    "postbuild": "pnpm run json:ts:post && rimraf 'tsconfig.build-temp.json' && cd dist && npm i --omit=dev --legacy-peer-deps @commitlint/load@^19.2.0",
     "json:ts:post": "json -I -f tsconfig.build.json -e 'this.extends = \"./tsconfig.json\"' && npx ncp 'tsconfig.build-temp.json' 'tsconfig.json'",
     "test": "vitest",
     "test:coverage": "vitest run --coverage.enabled --coverage.reporter='json' ",
@@ -43,7 +43,6 @@
     "@actions/core": "^1.10.1",
     "@actions/github": "^6.0.0",
     "@commitlint/config-conventional": "^19.2.2",
-    "@commitlint/config-validator": "^19.0.3",
     "@commitlint/lint": "^19.2.2",
     "@commitlint/load": "^19.2.0"
   },
@@ -64,8 +63,5 @@
     "tsup": "^8.1.0",
     "typescript": "^5.5.2",
     "vitest": "^1.6.0"
-  },
-  "lint-staged": {
-    "*": "eslint --fix"
   }
 }

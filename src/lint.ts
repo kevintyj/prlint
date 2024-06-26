@@ -1,8 +1,14 @@
+import { promisify } from 'node:util';
+import { exec } from 'node:child_process';
 import type { LintOptions, QualifiedConfig } from '@commitlint/types';
 import load from '@commitlint/load';
 import lint from '@commitlint/lint';
 import { setOutput } from '@actions/core';
 import logWithTile from './log.js';
+import handleError from './errHandle.js';
+import type { downloadOptions } from './index.js';
+
+const execPromise = promisify(exec);
 
 /**
  * Conditionally sets values from configuration as a LintOptions object
@@ -21,19 +27,52 @@ function getLintOptions(configuration: QualifiedConfig): LintOptions {
 	};
 }
 
+type configurationProps = {
+	downloadOptions: downloadOptions
+};
+
+async function loadCommitLintConfig(downloadConfig: downloadOptions) {
+	try {
+		return await load({});
+	}
+	/* v8 ignore next 8 */
+	catch (err) {
+		const missingPackage = extractPackageNameFromError(err instanceof Error ? err.message : '');
+		if (missingPackage != null && downloadConfig !== 'ignore') {
+			await execPromise(`npm install ${missingPackage} --omit=dev --legacy-peer-deps`).catch(handleError);
+			return loadCommitLintConfig(downloadConfig);
+		}
+		handleError(err);
+	}
+}
+
+function extractPackageNameFromError(errorMessage: string) {
+	const match = errorMessage.match(/Cannot find module ['"]([^'"]+)['"]/);
+	return match ? match[1] : null;
+}
+
 export const testLintOptions = {
 	getLintOptions,
+	extractPackageNameFromError,
+	loadCommitLintConfig,
 };
 
 /**
  * Utilizes the {@link lint} function to verify the title with options fetched using {@link getLintOptions}
  * @param {string} title - The commit/PR title to check for lint
+ * @param {configurationProps} config - the verifyTitle configuration object
  * @return {Promise<boolean>} - Returns true if linter passes, throws {@link Error} if failing
  */
-export async function verifyTitle(title: string): Promise<boolean> {
-	const commitlintConfig: QualifiedConfig = await load({});
+export async function verifyTitle(title: string, config: configurationProps = { downloadOptions: 'ignore' }): Promise<boolean> {
+	const commitlintConfig: QualifiedConfig = await loadCommitLintConfig(config.downloadOptions) as QualifiedConfig;
 
-	const linterResult = await lint(title, commitlintConfig.rules, getLintOptions(commitlintConfig));
+	const linterResult = await lint(
+		title,
+		config.downloadOptions === 'test'
+			? { 'subject-case': [2, 'always', 'sentence-case'] }
+			: commitlintConfig.rules,
+		getLintOptions(commitlintConfig),
+	);
 
 	if (linterResult.valid) {
 		setOutput('lint-status', '✅ Commitlint tests passed!\n');

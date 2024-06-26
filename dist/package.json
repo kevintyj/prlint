@@ -1,3 +1,6 @@
 {
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "@commitlint/load": "^19.2.0"
+  }
 }

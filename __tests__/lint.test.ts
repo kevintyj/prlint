@@ -1,9 +1,9 @@
 import process from 'node:process';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import load from '@commitlint/load';
 import { testLintOptions, verifyTitle } from '../src/lint';
 
-const { getLintOptions } = testLintOptions;
+const { getLintOptions, extractPackageNameFromError, loadCommitLintConfig } = testLintOptions;
 
 /* eslint-disable regexp/no-super-linear-backtracking */
 const emptyConfigOption = {
@@ -61,14 +61,35 @@ describe('commitlint', async () => {
 	});
 
 	it('throw error on incorrect title', async () => {
-		await expect(verifyTitle('foo: bar')).rejects.toThrowError(/check failed/);
-		await expect(verifyTitle('foo: bar', 'something.config.js')).rejects.toThrowError(/subject-case/);
-		await expect(verifyTitle('test: add tests', 'commitlint.config.js')).rejects.toThrowError(/sentence-case/);
+		await expect(verifyTitle('foo: bar.', { downloadOptions: 'node' })).rejects.toThrow();
+		await expect(verifyTitle('foo: bar.', { downloadOptions: 'ignore' })).rejects.toThrow();
+		await expect(verifyTitle('test: add tests', { downloadOptions: 'test' })).rejects.toThrowError(/sentence-case/);
 	});
 
 	it('return true if title is valid', async () => {
-		await expect(verifyTitle('fix: Add new commets')).resolves.toEqual(true);
-		await expect(verifyTitle('feat: Title is short and nice!', 'something.config.js')).resolves.toEqual(true);
-		await expect(verifyTitle('test: Add test suites', 'commitlint.config.js')).resolves.toEqual(true);
+		await expect(verifyTitle('fix: Add new comments', { downloadOptions: 'test' })).resolves.toEqual(true);
+		await expect(verifyTitle('feat: Title is short and nice!', { downloadOptions: 'test' })).resolves.toEqual(true);
+		await expect(verifyTitle('test: Add test suites', { downloadOptions: 'test' })).resolves.toEqual(true);
+	});
+});
+
+describe('handler', async () => {
+	it('misc errors should return empty', () => {
+		expect(extractPackageNameFromError('Error: You forgot a semicolon')).toBeNull;
+	});
+
+	it('valid errors should return package', () => {
+		expect(extractPackageNameFromError('Cannot find module "semicolon"')).toBe('semicolon');
+	});
+
+	it('test valid config', () => {
+		expect(loadCommitLintConfig()).resolves.not.toThrow;
+		expect(loadCommitLintConfig('node')).resolves.not.toThrow;
+	});
+
+	it('test failing config', () => {
+		vi.spyOn(process, 'cwd').mockReturnValue('/text-tmp');
+		expect(loadCommitLintConfig('node')).toThrow;
+		expect(loadCommitLintConfig('ignore')).toThrow;
 	});
 });

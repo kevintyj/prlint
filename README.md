@@ -30,6 +30,53 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: 📝Validate PR title with commitlint
+        uses: kevintyj/prlint@v2
+        # Optional
+        with:
+          download-dependencies: ignore
+```
+The above action only check's out the current repository to fetch the commitlint configuration file.
+PNPM and node is used to install necessary dependencies, then config-conventional is used as a default config.
+When using the above configuration, `pnpm-lock.yaml` is required. Please use npm and node if `package-lock.json` is used.
+
+## v2 release
+
+> [!CAUTION]
+> v2.0.0 release is an unstable breaking build. v2.0.0 is known to have issues with
+> **remote action run**. You will still be able to run v2.0.0 as a local action.
+
+----
+
+**This new major version of prlint updates commitlint package to the new v19.
+This update removes support for CJS and only exports the app as a ESM package
+(this should not affect the way you use this plugin in any way as the Github
+node runner handles ESM just fine).**
+
+### New configuration dependency option
+Now users can make the dependency install step **optional**. The action will automatically install the dependency listed in your configuration file. 
+This means that if the user's config does not have any dependencies, the entire node and npm setup process can be omitted.
+
+**See Inputs section for more details on how to set this option**
+
+However, if you wish to still download dependencies as a part of your workflow (recommended with cache enabled), resulting in a file as follows: 
+
+`prlint.yml`
+```yaml
+name: 📝 Lint PR title
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔖Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
       - name: 📦Setup PNPM
         uses: pnpm/action-setup@v4
         with:
@@ -39,22 +86,45 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
+          
+      - name: 🗂️ Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      - name: 🚀 Cache pnpm packages
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+            
       - name: 🛠️Install dependencies for prlint
         run: pnpm install @commitlint/config-conventional
       - name: 📝Validate PR title with commitlint
         uses: kevintyj/prlint@v2
 ```
-The above action only check's out the current repository to fetch the commitlint configuration file.
-PNPM and node is used to install necessary dependencies, then config-conventional is used as a default config.
-When using the above configuration, `pnpm-lock.yaml` is required. Please use npm and node if `package-lock.json` is used.
 
-## v2 release
-**This new major version of prlint updates commitlint package to the new v19.
-This update removes support for CJS and only exports the app as a ESM package
-(this should not affect the way you use this plugin in any way as the Github
-node runner handles ESM just fine).**
+**When to use different options**
+
+| Project environment and nature of commitlint config                 | Recommended method                                                                                     | 
+|---------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
+| Does not use "extends" or outside dependencies **Recommended**      | 'ignore'                                                                                               |
+| Does not use "extends" but also contains other outside dependencies | 'ignore' and install dependencies using actions                                                        |
+| Does use "extends" but no outside dependencies                      | 'node' when no caching is used 'ignore' and install dependencies using actions when caching is enabled |
+| Does use "extends" but also contains other outside dependencies     | 'ignore' and install dependencies using actions                                                        |
 
 ### Inputs
+
+#### `download-dependencies`
+**Optional** Experimental - use node to download commitlint config dependency (eg. @commitlint/config-conventional) Default : `'ignore'`
+
+Options: 
+- `'node'` uses node's exec to run a child process to automatically detect the dependency and install from action (may be slower if caching is not enabled in actions) - currently only limited to `@commitlint/config-conventional`
+- `'ignore'` expects all dependencies to be added with actions script using a package manager such as npm or pnpm
+
+> Only available in v2
+> 
 #### `cl-config`
 **Optional** Path to commit lint config. Default : `'commitlint.config.js'`
 

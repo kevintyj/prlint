@@ -13,7 +13,7 @@ export default antfu(
 			'**/dist',
 			'.idea',
 			'**/__fixtures__',
-			'eslint.config.js',
+			'eslint.config.js'
 		],
 		overrides: {
 			typescript: {
