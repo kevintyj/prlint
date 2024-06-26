@@ -1,5 +1,13 @@
 # @kevintyj/prlint
 
+## 2.1.0
+
+### Minor Changes
+
+- [`d6cb453dbf8447cdddc94fb4cbe59763e80fe078`](https://github.com/kevintyj/prlint/commit/d6cb453dbf8447cdddc94fb4cbe59763e80fe078) Thanks [@kevintyj](https://github.com/kevintyj)! - Add ability to pass in body to commit
+
+- [#18](https://github.com/kevintyj/prlint/pull/18) [`a99014b7b89d14c0e30e6354464b218df764b04c`](https://github.com/kevintyj/prlint/commit/a99014b7b89d14c0e30e6354464b218df764b04c) Thanks [@kevintyj](https://github.com/kevintyj)! - Fixes unresolved behavior on remote action run
+
 ## 2.0.0
 
 ### Major Changes
