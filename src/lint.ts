@@ -35,21 +35,14 @@ async function loadCommitLintConfig(downloadConfig: downloadOptions) {
 	try {
 		return await load({});
 	}
-	/* v8 ignore next 3 */
+	/* v8 ignore next 8 */
 	catch (err) {
 		const missingPackage = extractPackageNameFromError(err instanceof Error ? err.message : '');
 		if (missingPackage != null && downloadConfig !== 'ignore') {
-			try {
-				await execPromise(`npm install ${missingPackage} --omit=dev --legacy-peer-deps`);
-			}
-			catch (err) {
-				handleError(err);
-			}
+			await execPromise(`npm install ${missingPackage} --omit=dev --legacy-peer-deps`).catch(handleError);
 			return loadCommitLintConfig(downloadConfig);
 		}
-		else {
-			handleError(err);
-		}
+		handleError(err);
 	}
 }
 

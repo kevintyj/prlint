@@ -84,10 +84,12 @@ describe('handler', async () => {
 
 	it('test valid config', () => {
 		expect(loadCommitLintConfig()).resolves.not.toThrow;
+		expect(loadCommitLintConfig('node')).resolves.not.toThrow;
 	});
 
 	it('test failing config', () => {
-		vi.spyOn(process, 'cwd').mockReturnValue('/tmp');
-		expect(loadCommitLintConfig()).toThrow;
+		vi.spyOn(process, 'cwd').mockReturnValue('/text-tmp');
+		expect(loadCommitLintConfig('node')).toThrow;
+		expect(loadCommitLintConfig('ignore')).toThrow;
 	});
 });

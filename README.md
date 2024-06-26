@@ -41,6 +41,13 @@ PNPM and node is used to install necessary dependencies, then config-conventiona
 When using the above configuration, `pnpm-lock.yaml` is required. Please use npm and node if `package-lock.json` is used.
 
 ## v2 release
+
+> [!CAUTION]
+> v2.0.0 release is an unstable breaking build. v2.0.0 is known to have issues with
+> **remote action run**. You will still be able to run v2.0.0 as a local action.
+
+----
+
 **This new major version of prlint updates commitlint package to the new v19.
 This update removes support for CJS and only exports the app as a ESM package
 (this should not affect the way you use this plugin in any way as the Github
