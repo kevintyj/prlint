@@ -40924,11 +40924,11 @@ async function run() {
     return await verifyTitle(`${pullRequestObject.title}\n\n${pullRequestObject.body ?? ''}`, { downloadOptions: downloadDependencies });
 }
 /**
- * Run the run() method with a optional timeout value set to 20 seconds to default
+ * Run the run() method with an optional timeout value set to 25 seconds to default
  */
 void (async () => {
-    const timeoutInput = core.getInput('timeout') ?? '20000';
-    const timeout = Number.parseInt(timeoutInput, 10);
+    const timeoutInput = core.getInput('timeout') ?? '25';
+    const timeout = Number.parseInt(timeoutInput, 10) * 1000;
     const timeoutPromise = new Promise((_, reject) => {
         setTimeout(() => reject(new Error('Action timed out')), timeout);
     });

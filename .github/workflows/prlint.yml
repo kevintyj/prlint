@@ -16,4 +16,4 @@ jobs:
         uses: ./
         with:
           download-dependencies: node
-          timeout: 30000
+          timeout: 60
