@@ -13,6 +13,10 @@ inputs:
     description: 'Use body text as commit body using Github style'
     required: false
     default: 'false'
+  timeout:
+    description: 'The maximum timeout value of the action'
+    required: false
+    default: 20000
 outputs:
   lint-status:
     description: The status of the PR lint

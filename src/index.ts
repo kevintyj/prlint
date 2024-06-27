@@ -12,6 +12,9 @@ type PullRequest = {
 export type DownloadOptions = 'ignore' | 'node' | 'test';
 export type BooleanAsString = 'true' | 'false';
 
+/**
+ * Main function for @prlint action
+ */
 async function run(): Promise<void> {
 	const downloadDependencies: DownloadOptions = core.getInput('download-dependencies') as DownloadOptions ?? 'ignore';
 	const body: BooleanAsString = core.getInput('body') as BooleanAsString ?? 'false';
@@ -27,13 +30,25 @@ async function run(): Promise<void> {
 		...((pullRequestPayload.body && body === 'true') ? { body: pullRequestPayload.body } : {}),
 	};
 
-	try {
-		// Github's default empty line break style
-		await verifyTitle(`${pullRequestObject.title}\n\n${pullRequestObject.body ?? ''}`, { downloadOptions: downloadDependencies });
-	}
-	catch (err) {
-		handleError(err);
-	}
+	return await verifyTitle(`${pullRequestObject.title}\n\n${pullRequestObject.body ?? ''}`, { downloadOptions: downloadDependencies });
 }
 
-await run();
+/**
+ * Run the run() method with a optional timeout value set to 20 seconds to default
+ */
+void (async () => {
+	const timeoutInput: string = core.getInput('timeout') ?? '20000';
+
+	const timeout = Number.parseInt(timeoutInput, 10);
+
+	const timeoutPromise = new Promise((_, reject) => {
+		setTimeout(() => reject(new Error('Action timed out')), timeout);
+	});
+
+	try {
+		await Promise.race([run(), timeoutPromise]);
+	}
+	catch (error) {
+		handleError(error);
+	}
+})();
