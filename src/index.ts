@@ -15,7 +15,7 @@ export type BooleanAsString = 'true' | 'false';
 /**
  * Main function for @prlint action
  */
-async function run(): Promise<void> {
+async function run(): Promise<boolean> {
 	const downloadDependencies: DownloadOptions = core.getInput('download-dependencies') as DownloadOptions ?? 'ignore';
 	const body: BooleanAsString = core.getInput('body') as BooleanAsString ?? 'false';
 
@@ -46,9 +46,9 @@ void (async () => {
 	});
 
 	try {
-		await Promise.race([run(), timeoutPromise]);
+		return await Promise.race([run(), timeoutPromise]);
 	}
-	catch (error) {
-		handleError(error);
+	catch (err) {
+		handleError(err);
 	}
 })();

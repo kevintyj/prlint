@@ -1,5 +1,5 @@
 import type { LintOptions, QualifiedConfig } from '@commitlint/types';
-import type { downloadOptions } from './index.js';
+import type { DownloadOptions } from './index.js';
 /**
  * Conditionally sets values from configuration as a LintOptions object
  * @param {QualifiedConfig} configuration - Commitlint configuration file from load
@@ -7,9 +7,9 @@ import type { downloadOptions } from './index.js';
  */
 declare function getLintOptions(configuration: QualifiedConfig): LintOptions;
 type configurationProps = {
-    downloadOptions: downloadOptions;
+    downloadOptions: DownloadOptions;
 };
-declare function loadCommitLintConfig(downloadConfig: downloadOptions): Promise<QualifiedConfig | undefined>;
+declare function loadCommitLintConfig(downloadConfig: DownloadOptions): Promise<QualifiedConfig | undefined>;
 declare function extractPackageNameFromError(errorMessage: string): string | null;
 export declare const testLintOptions: {
     getLintOptions: typeof getLintOptions;
