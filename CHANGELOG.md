@@ -1,5 +1,11 @@
 # @kevintyj/prlint
 
+## 2.2.0
+
+### Minor Changes
+
+- [#20](https://github.com/kevintyj/prlint/pull/20) [`7a22e6b95bd102732dd05d78a269adf9738617db`](https://github.com/kevintyj/prlint/commit/7a22e6b95bd102732dd05d78a269adf9738617db) Thanks [@kevintyj](https://github.com/kevintyj)! - Add timeout and timeout input on action
+
 ## 2.1.0
 
 ### Minor Changes
