@@ -40928,12 +40928,15 @@ async function run() {
  */
 void (async () => {
     const timeoutInput = core.getInput('timeout') ?? '25';
-    const timeout = Number.parseInt(timeoutInput, 10) * 1000;
+    const timeoutSeconds = Number.parseInt(timeoutInput, 10) * 1000;
+    let timeoutId = setTimeout(() => { }, 0); // Default to timeout
     const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Action timed out')), timeout);
+        timeoutId = setTimeout(() => reject(new Error('Action timed out')), timeoutSeconds);
     });
     try {
-        return await Promise.race([run(), timeoutPromise]);
+        const result = await Promise.race([run(), timeoutPromise]);
+        clearTimeout(timeoutId);
+        return result;
     }
     catch (err) {
         errHandle(err);

@@ -38,15 +38,17 @@ async function run(): Promise<boolean> {
  */
 void (async () => {
 	const timeoutInput: string = core.getInput('timeout') ?? '25';
+	const timeoutSeconds = Number.parseInt(timeoutInput, 10) * 1000;
 
-	const timeout = Number.parseInt(timeoutInput, 10) * 1000;
-
+	let timeoutId: NodeJS.Timeout = setTimeout(() => {}, 0); // Default to timeout
 	const timeoutPromise = new Promise((_, reject) => {
-		setTimeout(() => reject(new Error('Action timed out')), timeout);
+		timeoutId = setTimeout(() => reject(new Error('Action timed out')), timeoutSeconds);
 	});
 
 	try {
-		return await Promise.race([run(), timeoutPromise]);
+		const result = await Promise.race([run(), timeoutPromise]);
+		clearTimeout(timeoutId);
+		return result;
 	}
 	catch (err) {
 		handleError(err);
