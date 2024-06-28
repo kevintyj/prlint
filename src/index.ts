@@ -12,7 +12,10 @@ type PullRequest = {
 export type DownloadOptions = 'ignore' | 'node' | 'test';
 export type BooleanAsString = 'true' | 'false';
 
-async function run(): Promise<void> {
+/**
+ * Main function for @prlint action
+ */
+async function run(): Promise<boolean> {
 	const downloadDependencies: DownloadOptions = core.getInput('download-dependencies') as DownloadOptions ?? 'ignore';
 	const body: BooleanAsString = core.getInput('body') as BooleanAsString ?? 'false';
 
@@ -27,13 +30,27 @@ async function run(): Promise<void> {
 		...((pullRequestPayload.body && body === 'true') ? { body: pullRequestPayload.body } : {}),
 	};
 
+	return await verifyTitle(`${pullRequestObject.title}\n\n${pullRequestObject.body ?? ''}`, { downloadOptions: downloadDependencies });
+}
+
+/**
+ * Run the run() method with an optional timeout value set to 25 seconds to default
+ */
+void (async () => {
+	const timeoutInput: string = core.getInput('timeout') ?? '25';
+	const timeoutSeconds = Number.parseInt(timeoutInput, 10) * 1000;
+
+	let timeoutId: NodeJS.Timeout = setTimeout(() => {}, 0); // Default to timeout
+	const timeoutPromise = new Promise((_, reject) => {
+		timeoutId = setTimeout(() => reject(new Error('Action timed out')), timeoutSeconds);
+	});
+
 	try {
-		// Github's default empty line break style
-		await verifyTitle(`${pullRequestObject.title}\n\n${pullRequestObject.body ?? ''}`, { downloadOptions: downloadDependencies });
+		const result = await Promise.race([run(), timeoutPromise]);
+		clearTimeout(timeoutId);
+		return result;
 	}
 	catch (err) {
 		handleError(err);
 	}
-}
-
-await run();
+})();

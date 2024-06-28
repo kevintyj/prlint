@@ -38,6 +38,7 @@ jobs:
         with:
           download-dependencies: ignore
           body: false
+          timeout: 20000
 ```
 
 ## v2 release
@@ -138,7 +139,21 @@ Options:
 - `'true'` Passes the body and appends the body in Github's default style (`\n\n`)
 - `'false'` Ignore body
 
-> Only available in v^2.0.1
+> Only available in v^2.1.0
+
+---
+
+### `timeout`
+**Optional** Change the default timeout for the action (in s). Default : `'25'`
+
+> If your action fails without a helpful fail log, it is most likely the action 
+> exiting before values are resolved. It is recommended to increase the timeout 
+> default when using our node importer to give enough time to load your dependencies. 
+
+Options:
+- `'timeout: {number}'` Any number value in s (seconds) accepted 
+
+> Only available in v^2.2.0
 
 ---
 
