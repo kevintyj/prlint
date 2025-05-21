@@ -1,5 +1,6 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
+import { setFailed } from '@actions/core';
 import handleError from './errHandle.js';
 import { verifyTitle } from './lint.js';
 
@@ -40,17 +41,17 @@ void (async () => {
 	const timeoutInput: string = core.getInput('timeout') ?? '25';
 	const timeoutSeconds = Number.parseInt(timeoutInput, 10) * 1000;
 
-	let timeoutId: NodeJS.Timeout = setTimeout(() => {}, 0); // Default to timeout
+	let timeoutId: NodeJS.Timeout = setTimeout(() => {}, 0);
 	const timeoutPromise = new Promise((_, reject) => {
 		timeoutId = setTimeout(() => reject(new Error('Action timed out')), timeoutSeconds);
 	});
 
 	try {
-		const result = await Promise.race([run(), timeoutPromise]);
+		await Promise.race([run(), timeoutPromise]);
 		clearTimeout(timeoutId);
-		return result;
 	}
 	catch (err) {
 		handleError(err, true);
+		setFailed('Action failed');
 	}
 })();

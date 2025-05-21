@@ -15,6 +15,7 @@ function handleError(err: Error | string | unknown, fail: boolean = true) {
 		error(message);
 		fail && setFailed(message);
 	}
+	setFailed('Out of bounds');
 }
 
 export default handleError;
