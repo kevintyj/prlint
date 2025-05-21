@@ -1,6 +1,5 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
-import { setFailed } from '@actions/core';
 import handleError from './errHandle.js';
 import { verifyTitle } from './lint.js';
 
@@ -51,7 +50,8 @@ void (async () => {
 		clearTimeout(timeoutId);
 	}
 	catch (err) {
-		handleError(err, true);
-		setFailed('Action failed');
+		handleError(err);
 	}
+	// eslint-disable-next-line node/prefer-global/process
+	process.exit(1);
 })();
