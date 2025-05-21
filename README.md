@@ -38,7 +38,7 @@ jobs:
         with:
           download-dependencies: ignore
           body: false
-          timeout: 20000
+          timeout: 25
 ```
 
 ## v2 release
@@ -46,6 +46,7 @@ jobs:
 > [!CAUTION]
 > v2.0.0 release is an unstable breaking build. v2.0.0 is known to have issues with
 > **remote action run**. You will still be able to run v2.0.0 as a local action.
+> **It is advised to use v2.2.0 and above.**
 
 ----
 
@@ -55,7 +56,7 @@ This update removes support for CJS and only exports the app as a ESM package
 node runner handles ESM just fine).**
 
 ### New configuration dependency option
-Now users can make the dependency install step **optional**. The action will automatically install the dependency listed in your configuration file. 
+Now users can make the dependency install step **optional**. The action will automatically install the dependency listed in your configuration file.
 This means that if the user's config does not have any dependencies, the entire node and npm setup process can be omitted.
 
 **See Inputs section for more details on how to set this option**
@@ -64,7 +65,7 @@ However, if you wish to still download dependencies as a part of your workflow (
 
 **When to use different options**
 
-| Project environment and nature of commitlint config                 | Recommended method                                                                                     | 
+| Project environment and nature of commitlint config                 | Recommended method                                                                                     |
 |---------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
 | Does not use "extends" or outside dependencies **Recommended**      | 'ignore'                                                                                               |
 | Does not use "extends" but also contains other outside dependencies | 'ignore' and install dependencies using actions                                                        |
@@ -73,7 +74,8 @@ However, if you wish to still download dependencies as a part of your workflow (
 
 **Sample github actions file (using pnpm to download dependencies):**
 
-`prlint.yml`
+<details><summary><code>`prlint.yml`</code></summary>
+
 ```yaml
 name: 📝 Lint PR title
 on:
@@ -113,9 +115,11 @@ jobs:
 
       - name: 🛠️Install dependencies for prlint
         run: pnpm install @commitlint/config-conventional
+
       - name: 📝Validate PR title with commitlint
         uses: kevintyj/prlint@v2
 ```
+</details>
 
 ---
 
@@ -124,7 +128,7 @@ jobs:
 ### `download-dependencies`
 **Optional** Experimental - use node to download commitlint config dependency (eg. @commitlint/config-conventional) Default : `'ignore'`
 
-Options: 
+Options:
 - `'node'` uses node's exec to run a child process to automatically detect the dependency and install from action (may be slower if caching is not enabled in actions) - currently only limited to `@commitlint/config-conventional`
 - `'ignore'` expects all dependencies to be added with actions script using a package manager such as npm or pnpm
 
@@ -146,12 +150,16 @@ Options:
 ### `timeout`
 **Optional** Change the default timeout for the action (in s). Default : `'25'`
 
-> If your action fails without a helpful fail log, it is most likely the action 
-> exiting before values are resolved. It is recommended to increase the timeout 
-> default when using our node importer to give enough time to load your dependencies. 
+> [!TIP]
+> If your action fails without a helpful fail log, it is most likely the action
+> exiting before values are resolved. It is recommended to increase the timeout
+> default when using our node importer to give enough time to load your dependencies.
+
+> [!NOTE]
+> There is an issue with versions below v2.2.0 where failing PR lint errors do not exit the process. This has been resolved in v2.3.0
 
 Options:
-- `'timeout: {number}'` Any number value in s (seconds) accepted 
+- `'timeout: {number}'` Any number value in s (seconds) accepted
 
 > Only available in v^2.2.0
 
@@ -160,7 +168,7 @@ Options:
 ### `cl-config`
 **Optional** Path to commit lint config. Default : `'commitlint.config.js'`
 
-> Removed in v2, Only available in v1.0.0 (v1)
+> Removed in v2, Only available in v1
 
 ## Outputs
 #### `lint-status`
@@ -183,7 +191,8 @@ project must contain the `config-conventional` package as a development dependen
 
 **Sample github actions file (using pnpm to download dependencies):**
 
-`prlint.yml`
+<details><summary><code>`prlint.yml`</code></summary>
+
 ```yaml
 name: 📝 Lint PR title
 on:
@@ -198,7 +207,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          
+
       - name: 📦Setup PNPM
         uses: pnpm/action-setup@v4
         with:
@@ -208,7 +217,7 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
-          
+
       - name: 🗂️ Get pnpm store directory
         shell: bash
         run: |
@@ -220,12 +229,15 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
-            
+
       - name: 🛠️Install dependencies for prlint
         run: pnpm install @commitlint/config-conventional
+
       - name: 📝Validate PR title with commitlint
         uses: kevintyj/prlint@v1
 ```
+
+</detail>
 
 The above action only check's out the current repository to fetch the commitlint configuration file.
 PNPM and node is used to install necessary dependencies, then config-conventional is used as a default config.

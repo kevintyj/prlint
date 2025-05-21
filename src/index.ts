@@ -46,11 +46,12 @@ void (async () => {
 	});
 
 	try {
-		const result = await Promise.race([run(), timeoutPromise]);
+		await Promise.race([run(), timeoutPromise]);
 		clearTimeout(timeoutId);
-		return result;
 	}
 	catch (err) {
-		handleError(err);
+		handleError(err, true);
+		// eslint-disable-next-line node/prefer-global/process
+		process.exit(1);
 	}
 })();

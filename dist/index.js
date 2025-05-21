@@ -40934,12 +40934,13 @@ void (async () => {
         timeoutId = setTimeout(() => reject(new Error('Action timed out')), timeoutSeconds);
     });
     try {
-        const result = await Promise.race([run(), timeoutPromise]);
+        await Promise.race([run(), timeoutPromise]);
         clearTimeout(timeoutId);
-        return result;
     }
     catch (err) {
-        errHandle(err);
+        errHandle(err, true);
+        // eslint-disable-next-line node/prefer-global/process
+        process.exit(1);
     }
 })();
 
