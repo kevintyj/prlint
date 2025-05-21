@@ -1,5 +1,11 @@
 # @kevintyj/prlint
 
+## 2.3.0
+
+### Minor Changes
+
+- [#23](https://github.com/kevintyj/prlint/pull/23) [`729b924a735a3cb3773744c79961862546cd534a`](https://github.com/kevintyj/prlint/commit/729b924a735a3cb3773744c79961862546cd534a) Thanks [@kevintyj](https://github.com/kevintyj)! - Fixes an issue with failing results not stopping the job before timeout
+
 ## 2.2.0
 
 ### Minor Changes
