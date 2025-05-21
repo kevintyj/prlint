@@ -40,7 +40,7 @@ void (async () => {
 	const timeoutInput: string = core.getInput('timeout') ?? '25';
 	const timeoutSeconds = Number.parseInt(timeoutInput, 10) * 1000;
 
-	let timeoutId: NodeJS.Timeout = setTimeout(() => {}, 0);
+	let timeoutId: NodeJS.Timeout = setTimeout(() => {}, 0); // Default to timeout
 	const timeoutPromise = new Promise((_, reject) => {
 		timeoutId = setTimeout(() => reject(new Error('Action timed out')), timeoutSeconds);
 	});
@@ -50,8 +50,6 @@ void (async () => {
 		clearTimeout(timeoutId);
 	}
 	catch (err) {
-		handleError(err);
+		handleError(err, true);
 	}
-	// eslint-disable-next-line node/prefer-global/process
-	process.exit(1);
 })();
