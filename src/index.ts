@@ -51,6 +51,6 @@ void (async () => {
 		return result;
 	}
 	catch (err) {
-		handleError(err);
+		handleError(err, true);
 	}
 })();

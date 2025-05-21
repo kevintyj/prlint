@@ -16,7 +16,7 @@ inputs:
   timeout:
     description: 'The maximum timeout value of the action'
     required: false
-    default: 20000
+    default: '25'
 outputs:
   lint-status:
     description: The status of the PR lint

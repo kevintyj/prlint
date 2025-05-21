@@ -38,7 +38,7 @@ jobs:
         with:
           download-dependencies: ignore
           body: false
-          timeout: 20000
+          timeout: 25
 ```
 
 ## v2 release
@@ -46,6 +46,7 @@ jobs:
 > [!CAUTION]
 > v2.0.0 release is an unstable breaking build. v2.0.0 is known to have issues with
 > **remote action run**. You will still be able to run v2.0.0 as a local action.
+> **It is advised to use v2.2.0 and above.**
 
 ----
 
@@ -113,6 +114,7 @@ jobs:
 
       - name: 🛠️Install dependencies for prlint
         run: pnpm install @commitlint/config-conventional
+
       - name: 📝Validate PR title with commitlint
         uses: kevintyj/prlint@v2
 ```
@@ -160,7 +162,7 @@ Options:
 ### `cl-config`
 **Optional** Path to commit lint config. Default : `'commitlint.config.js'`
 
-> Removed in v2, Only available in v1.0.0 (v1)
+> Removed in v2, Only available in v1
 
 ## Outputs
 #### `lint-status`
@@ -223,6 +225,7 @@ jobs:
             
       - name: 🛠️Install dependencies for prlint
         run: pnpm install @commitlint/config-conventional
+        
       - name: 📝Validate PR title with commitlint
         uses: kevintyj/prlint@v1
 ```
