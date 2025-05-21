@@ -37582,7 +37582,6 @@ var core = __nccwpck_require__(9093);
 // EXTERNAL MODULE: ./node_modules/.pnpm/@actions+github@6.0.0/node_modules/@actions/github/lib/github.js
 var github = __nccwpck_require__(5942);
 ;// CONCATENATED MODULE: ./src/errHandle.ts
-/* eslint-disable node/prefer-global/process */
 
 /**
  * Handle standard error handler for github fail status
@@ -40940,6 +40939,8 @@ void (async () => {
     }
     catch (err) {
         errHandle(err, true);
+        // eslint-disable-next-line node/prefer-global/process
+        process.exit(1);
     }
 })();
 

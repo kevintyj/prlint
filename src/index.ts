@@ -51,5 +51,7 @@ void (async () => {
 	}
 	catch (err) {
 		handleError(err, true);
+		// eslint-disable-next-line node/prefer-global/process
+		process.exit(1);
 	}
 })();
