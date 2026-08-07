@@ -2,19 +2,19 @@ name: Commitlint (prlint)
 author: Kevin Taeyoon Jin <hello@kevintyj.com>
 description: Ensure PR title match commitlint config
 runs:
-  using: node20
+  using: node24
   main: dist/index.js
 inputs:
   download-dependencies:
-    description: 'Download commitlint dependencies'
+    description: Download commitlint dependencies
     required: false
-    default: 'ignore'
+    default: ignore
   body:
-    description: 'Use body text as commit body using Github style'
+    description: Use body text as commit body using Github style
     required: false
     default: 'false'
   timeout:
-    description: 'The maximum timeout value of the action'
+    description: The maximum timeout value of the action
     required: false
     default: '25'
 outputs:
