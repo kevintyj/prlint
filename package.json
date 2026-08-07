@@ -61,7 +61,7 @@
     "@changesets/cli": "^2.31.1",
     "@commitlint/cli": "^21.2.1",
     "@commitlint/types": "^21.2.0",
-    "@types/node": "^24.13.3",
+    "@types/node": "^26.1.2",
     "@vercel/ncc": "^0.44.1",
     "@vitest/coverage-v8": "^4.1.10",
     "eslint": "^10.8.0",
