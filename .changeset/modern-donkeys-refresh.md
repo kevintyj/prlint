@@ -4,7 +4,7 @@
 
 Modernize toolchain and runtime
 
-- Run the action on the Node 24 runtime (was Node 20)
+- Run the action on the Node 24 runtime (was Node 20). GitHub-hosted runners already execute actions on Node 24; self-hosted runners need runner v2.327.1+
 - Update commitlint packages to v21 (requires Node 22.12+ when self-installing dependencies)
 - Update `@actions/core` to v3 and `@actions/github` to v9
 - Fix input defaults: empty inputs (`timeout`, `download-dependencies`, `body`) previously bypassed their documented defaults, causing spurious immediate timeouts (`NaN` timeout) and unintended dependency downloads
