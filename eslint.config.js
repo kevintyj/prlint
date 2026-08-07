@@ -5,9 +5,19 @@ export default antfu(
 	{
 		typescript: {
 			tsconfigPath: 'tsconfig.json',
+			overrides: {
+				'ts/consistent-type-definitions': ['error', 'type'],
+			},
+			overridesTypeAware: {
+				'ts/no-unsafe-assignment': 'warn',
+				'ts/no-unsafe-member-access': 'warn',
+				'ts/strict-boolean-expressions': 'warn',
+			},
 		},
 		stylistic: {
+			indent: 'tab',
 			quotes: 'single',
+			semi: true,
 		},
 		ignores: [
 			'**/dist',
@@ -15,35 +25,23 @@ export default antfu(
 			'**/__fixtures__',
 			'eslint.config.js'
 		],
-		overrides: {
-			typescript: {
-				'ts/consistent-type-definitions': ['error', 'type'],
-				'ts/no-unsafe-assignment': 'warn',
-				'ts/no-unsafe-member-access': 'warn',
-				'ts/strict-boolean-expressions': 'warn'
-			},
-		},
 	}, {
 		rules: {
-			'style/indent': ['error', 'tab', {
-				SwitchCase: 1,
-			}],
 			'style/no-tabs': ['error', { allowIndentationTabs: true }],
 			'style/no-mixed-spaces-and-tabs': ['error', 'smart-tabs'],
-			'style/array-bracket-newline': ['error', { multiline : true }],
+			'style/array-bracket-newline': ['error', { multiline: true }],
 			'style/array-element-newline': ['error', 'consistent'],
-			'style/semi': ['error', 'always'],
+		},
+	}, {
+		files: ['**/*.json', '**/*.json5', '**/*.jsonc'],
+		rules: {
+			'jsonc/indent': ['error', 2],
 		},
 	}, {
 		files: ['tsconfig.json', 'package.json'],
 		rules: {
 			'jsonc/sort-keys': 'off',
 		},
-	}, {
-		files: ['**/*.md'],
-		rules: {
-			'style/no-trailing-spaces': 'warn'
-		}
 	}, {
 		files: ['__tests__/**/*.test.ts'],
 		rules: {

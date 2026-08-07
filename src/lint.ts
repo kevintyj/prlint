@@ -1,12 +1,12 @@
-import { promisify } from 'node:util';
-import { exec } from 'node:child_process';
 import type { LintOptions, QualifiedConfig } from '@commitlint/types';
-import load from '@commitlint/load';
-import lint from '@commitlint/lint';
-import { setOutput } from '@actions/core';
-import logWithTile from './log.js';
-import handleError from './errHandle.js';
 import type { DownloadOptions } from './index.js';
+import { exec } from 'node:child_process';
+import { promisify } from 'node:util';
+import { setOutput } from '@actions/core';
+import lint from '@commitlint/lint';
+import load from '@commitlint/load';
+import handleError from './errHandle.js';
+import logWithTile from './log.js';
 
 const execPromise = promisify(exec);
 
@@ -28,7 +28,7 @@ function getLintOptions(configuration: QualifiedConfig): LintOptions {
 }
 
 type configurationProps = {
-	downloadOptions: DownloadOptions
+	downloadOptions: DownloadOptions;
 };
 
 async function loadCommitLintConfig(downloadConfig: DownloadOptions) {

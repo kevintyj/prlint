@@ -1,9 +1,18 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
 import * as core from '@actions/core';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import handleError from '../src/errHandle';
 
-const debugErr = vi.spyOn(core, 'error');
-const debugFail = vi.spyOn(core, 'setFailed');
+vi.mock('@actions/core', async (importOriginal) => {
+	const actual = await importOriginal<typeof core>();
+	return {
+		...actual,
+		error: vi.fn(),
+		setFailed: vi.fn(),
+	};
+});
+
+const debugErr = vi.mocked(core.error);
+const debugFail = vi.mocked(core.setFailed);
 
 describe('error handler', () => {
 	beforeEach(() => {

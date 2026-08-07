@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🔖Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - name: 📝Validate PR title with commitlint
@@ -54,6 +54,11 @@ jobs:
 This update removes support for CJS and only exports the app as a ESM package
 (this should not affect the way you use this plugin in any way as the Github
 node runner handles ESM just fine).**
+
+> [!NOTE]
+> As of v2.4.0 the action runs on the Node 24 runtime and ships with commitlint v21.
+> If you install commitlint dependencies yourself (`download-dependencies: ignore`),
+> use Node 22.12+ when setting up your workflow.
 
 ### New configuration dependency option
 Now users can make the dependency install step **optional**. The action will automatically install the dependency listed in your configuration file.
@@ -87,18 +92,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🔖Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: 📦Setup PNPM
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
-          version: 9
+          version: 10
       - name: 🌳Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: 24
           cache: pnpm
 
       - name: 🗂️ Get pnpm store directory
@@ -171,10 +176,10 @@ Options:
 > Removed in v2, Only available in v1
 
 ## Outputs
-#### `lint-status`
+### `lint-status`
 Status of the lint result. Returns `✅ Commitlint tests passed!` if successful and `❌ Commitlint tests failed` if
 linter tests fail.
-#### `lint-details`
+### `lint-details`
 Output of the commitlint result.
 
 ## Limitations
@@ -237,7 +242,7 @@ jobs:
         uses: kevintyj/prlint@v1
 ```
 
-</detail>
+</details>
 
 The above action only check's out the current repository to fetch the commitlint configuration file.
 PNPM and node is used to install necessary dependencies, then config-conventional is used as a default config.

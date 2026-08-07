@@ -1,6 +1,6 @@
 import process from 'node:process';
-import { describe, expect, it, vi } from 'vitest';
 import load from '@commitlint/load';
+import { describe, expect, it, vi } from 'vitest';
 import { testLintOptions, verifyTitle } from '../src/lint';
 
 const { getLintOptions, extractPackageNameFromError, loadCommitLintConfig } = testLintOptions;
@@ -75,21 +75,21 @@ describe('commitlint', async () => {
 
 describe('handler', async () => {
 	it('misc errors should return empty', () => {
-		expect(extractPackageNameFromError('Error: You forgot a semicolon')).toBeNull;
+		expect(extractPackageNameFromError('Error: You forgot a semicolon')).toBeNull();
 	});
 
 	it('valid errors should return package', () => {
 		expect(extractPackageNameFromError('Cannot find module "semicolon"')).toBe('semicolon');
 	});
 
-	it('test valid config', () => {
-		expect(loadCommitLintConfig()).resolves.not.toThrow;
-		expect(loadCommitLintConfig('node')).resolves.not.toThrow;
+	it('test valid config', async () => {
+		await expect(loadCommitLintConfig('ignore')).resolves.toHaveProperty('rules');
+		await expect(loadCommitLintConfig('node')).resolves.toHaveProperty('rules');
 	});
 
-	it('test failing config', () => {
+	it('falls back to default config when no config file is found', async () => {
 		vi.spyOn(process, 'cwd').mockReturnValue('/text-tmp');
-		expect(loadCommitLintConfig('node')).toThrow;
-		expect(loadCommitLintConfig('ignore')).toThrow;
+		await expect(loadCommitLintConfig('node')).resolves.toHaveProperty('extends');
+		await expect(loadCommitLintConfig('ignore')).resolves.toHaveProperty('extends');
 	});
 });
