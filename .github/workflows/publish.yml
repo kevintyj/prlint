@@ -1,6 +1,10 @@
 name: 🚀 Build & Publish
-# Forceful manual trigger
+# Runs on every push to main: opens/updates the release PR while changesets
+# are pending, then tags and creates the GitHub release once it is merged.
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 # Disable concurrent builds
@@ -29,7 +33,7 @@ jobs:
       - name: 🛠️Install dependencies from lockfile
         run: pnpm install --frozen-lockfile
 
-      - name: 🦋Create Release Pull Request or Publish to npm
+      - name: 🦋Create Release Pull Request or Tag Release
         id: changesets
         uses: changesets/action@v1
         with:
@@ -38,3 +42,20 @@ jobs:
           title: 'ci(release): Version packages'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🏷️Ensure release tag, major tag, and GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(jq -r .version package.json)
+          TAG="v$VERSION"
+          # Only act once the current version has been tagged (i.e. the release PR is merged)
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            MAJOR="v${VERSION%%.*}"
+            git tag -f "$MAJOR" "$TAG"
+            git push origin "$TAG" "$MAJOR" --force
+            gh release view "$TAG" >/dev/null 2>&1 \
+              || gh release create "$TAG" --title "$TAG" --generate-notes
+          else
+            echo "No tag for $TAG yet (release PR not merged) - skipping"
+          fi
